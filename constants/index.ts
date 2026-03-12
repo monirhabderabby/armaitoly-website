@@ -5,4 +5,5 @@ export const siteInfo = {
   facebook: "https://www.facebook.com/joyresort.kpg/",
   instagram: "https://www.instagram.com/joy_beach_villas/",
   name: "Joy Beach Villas",
+  email: "reception@joybeachvillas.com",
 };
