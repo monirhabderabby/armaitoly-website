@@ -11,10 +11,16 @@ interface Props {
   title: string;
   description: string;
   imageSrc: string;
+  isAvailabilityEnabled?: boolean;
 }
 
 // This is a Server Component (no "use client" directive)
-export default function Hero({ title, description, imageSrc }: Props) {
+export default function Hero({
+  title,
+  description,
+  imageSrc,
+  isAvailabilityEnabled = true,
+}: Props) {
   const router = useRouter();
   const onCheckAvailability = (data: AvailabilityCheckData) => {
     const params = new URLSearchParams({
@@ -61,7 +67,9 @@ export default function Hero({ title, description, imageSrc }: Props) {
         </p>
 
         {/* Availability Checker */}
-        <AvailabilityCheckerHero onCheck={onCheckAvailability} />
+        {isAvailabilityEnabled && (
+          <AvailabilityCheckerHero onCheck={onCheckAvailability} />
+        )}
       </div>
 
       {/* Scroll to down indicator */}
