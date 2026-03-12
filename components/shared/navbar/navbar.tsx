@@ -1,6 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import LanguageSwitcher from "@/components/ui/language-switcher";
+import "flag-icons/css/flag-icons.min.css";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -68,10 +70,10 @@ export default function Navbar() {
               Check Availability
             </Button>
 
-            {/* Language selector */}
-            <button className="flex items-center gap-1 text-white/80 hover:text-white transition-colors text-sm">
-              🇺🇸 EN
-            </button>
+            {/* Desktop Language Switcher */}
+            <div className="hidden lg:block">
+              <LanguageSwitcher />
+            </div>
 
             {/* Mobile menu button */}
             <button
@@ -99,6 +101,14 @@ export default function Navbar() {
                 {item.label}
               </a>
             ))}
+
+            {/* Mobile language selector */}
+            <div className="pt-3 border-t border-white/10">
+              <p className="text-white/40 text-xs mb-3 uppercase tracking-wider">
+                Language
+              </p>
+              <LanguageSwitcher mobile />
+            </div>
           </div>
         )}
       </div>

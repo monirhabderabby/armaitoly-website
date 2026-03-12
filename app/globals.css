@@ -153,3 +153,18 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: #1c95c8; /* slightly darker primary */
 }
+
+/* ✅ Hide Google Translate top banner */
+
+.goog-te-banner-frame.skiptranslate,
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+.skiptranslate {
+  display: none !important;
+}

@@ -351,6 +351,7 @@ function DateField({ label, value, onChange, minDate, theme }: DateFieldProps) {
         zIndex: open ? 9999 : 1, // ← bump to 9999
         isolation: "isolate", // ← creates new stacking context
       }}
+      suppressHydrationWarning
     >
       <div
         style={{
