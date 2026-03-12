@@ -154,9 +154,16 @@ const FaqContainer = () => {
                         transition={{ duration: 0.28, ease: "easeInOut" }}
                         style={{ overflow: "hidden" }}
                       >
-                        <p className="pb-3 text-sm text-gray-500 leading-relaxed pr-6">
-                          {faq.answer}
-                        </p>
+                        <div
+                          className="prose prose-sm max-w-none text-gray-500 my-3 
+    prose-ul:list-disc prose-ul:pl-5 
+    prose-ol:list-decimal prose-ol:pl-5
+    prose-li:my-0.5 
+    [&_ul]:list-disc [&_ul]:pl-5 
+    [&_ol]:list-decimal [&_ol]:pl-5
+     [&_li]:my-2"
+                          dangerouslySetInnerHTML={{ __html: faq.answer }}
+                        />
                       </motion.div>
                     )}
                   </AnimatePresence>
