@@ -1,6 +1,7 @@
 import Footer from "@/components/shared/footer/footer";
 import Navbar from "@/components/shared/navbar/navbar";
 import AppProvider from "@/providers/app-provider";
+import SmoothScrolling from "@/providers/smooth-scrolling";
 import TranslateProvider from "@/providers/translate-provider";
 import "flag-icons/css/flag-icons.min.css";
 import type { Metadata } from "next";
@@ -34,9 +35,11 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <AppProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <SmoothScrolling>
+            <Navbar />
+            {children}
+            <Footer />
+          </SmoothScrolling>
         </AppProvider>
 
         {/* ✅ Google translate container */}

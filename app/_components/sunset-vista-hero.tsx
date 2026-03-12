@@ -5,6 +5,7 @@ interface Props {
   description: string;
   em?: string;
   imgSrc: string;
+  scrollView?: boolean;
 }
 
 export default function SunsetVistaHero({
@@ -12,17 +13,18 @@ export default function SunsetVistaHero({
   description,
   em,
   imgSrc,
+  scrollView = true,
 }: Props) {
   return (
-    <section className="relative w-full min-h-100 max-h-195 h-auto overflow-hidden flex items-center justify-center">
+    <section className="relative w-full py-20 max-h-195 h-auto overflow-hidden flex items-center justify-center">
       {/* ── Fixed background image ── */}
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0 -z-10 ">
         <Image
           src={imgSrc}
           alt="Hin Kong Bay tropical villa with infinity pool"
           fill
           priority
-          className="object-cover object-center "
+          className="object-cover object-center fixed"
         />
 
         <div className="absolute inset-0 bg-black/50" />
@@ -53,12 +55,14 @@ export default function SunsetVistaHero({
         </p>
 
         {/* Scroll nudge */}
-        <div className="mt-5 flex flex-col items-center gap-1.5 opacity-35 animate-[fadeUp_0.7s_360ms_cubic-bezier(.22,1,.36,1)_both]">
-          <span className="font-mono text-[8px] tracking-[0.22em] uppercase text-white">
-            Scroll
-          </span>
-          <span className="block w-px h-6 bg-white/50 animate-[scrollPulse_1.9s_ease-in-out_infinite]" />
-        </div>
+        {scrollView && (
+          <div className="mt-5 flex flex-col items-center gap-1.5 opacity-35 animate-[fadeUp_0.7s_360ms_cubic-bezier(.22,1,.36,1)_both]">
+            <span className="font-mono text-[8px] tracking-[0.22em] uppercase text-white">
+              Scroll
+            </span>
+            <span className="block w-px h-6 bg-white/50 animate-[scrollPulse_1.9s_ease-in-out_infinite]" />
+          </div>
+        )}
       </div>
     </section>
   );

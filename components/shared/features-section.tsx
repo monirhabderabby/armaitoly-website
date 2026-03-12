@@ -119,7 +119,7 @@ export default function FeatureSection({
             </div>
 
             {/* Floating stat badge */}
-            <div className="absolute -bottom-4 -left-4 sm:-bottom-5 sm:-left-5 bg-white rounded-lg px-4 py-3 shadow-md shadow-black/10 border border-slate-100 flex items-center gap-3">
+            {/* <div className="absolute -bottom-4 -left-4 sm:-bottom-5 sm:-left-5 bg-white rounded-lg px-4 py-3 shadow-md shadow-black/10 border border-slate-100 flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-md bg-[#24a9e1]/10">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path
@@ -143,7 +143,7 @@ export default function FeatureSection({
                   Up to 24 guests
                 </p>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

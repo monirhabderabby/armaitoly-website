@@ -1,7 +1,10 @@
 import FeatureSection from "@/components/shared/features-section";
 import Hero from "@/components/shared/hero/hero";
+import GivingBackEnvironment from "./_components/giving-back-environment";
+import GuestReviews from "./_components/guest-reviews";
 import HowToGetHere from "./_components/how-to-get-here";
 import SunsetVistaHero from "./_components/sunset-vista-hero";
+import FaqContainer from "./faq/_components/faq-container";
 
 export default function Home() {
   return (
@@ -11,6 +14,49 @@ export default function Home() {
         description="Celebrate The Good Life on Koh Phangan"
         imageSrc="/hero/hero.png"
       />
+
+      {/* Image on the RIGHT */}
+      <FeatureSection
+        eyebrow=""
+        title="Your Ultimate Tropical Escape"
+        em="in the JOY Beach Villas"
+        imgSrc="/tropical.png"
+        imgAlt="JOY Beach Villas tropical escape"
+        cta="Our Eco-Friendly Initiatives"
+        ctaHref="/eco"
+        body={[
+          "Depart from the hustle and bustle of the city. Make your escape to the breathtaking paradise of Koh Phangan and let the scenic Joy Beach Villas be your home away from home.",
+          "Nestled right on the pristine beach, this sweet retreat presents spectacular views and serves as your gateway to the myriad of possibilities you can explore on the island.",
+          "Craving something tasty? Take a leisure walk to the scrumptious restaurants and cozy coffee shops. In need of some essentials? Nearby supermarkets and fruit shops are ready to serve you.",
+        ]}
+      />
+
+      {/* Image on the LEFT — just add reverse */}
+      <FeatureSection
+        reverse
+        eyebrow=""
+        title="A Welcoming Comfort on the Island"
+        em="directly located at Hin Kong Beach"
+        imgSrc="/iceland.jpg"
+        imgAlt="Villa terrace at JOY Beach Villas"
+        cta="Check The Villas"
+        ctaHref="/villas"
+        body={[
+          "Right on the beach, our 13 exclusive villas (including six brand new ones) are your home away from home, bringing you welcoming comfort.",
+          "One look at these impressive villas and you'll see the perfect fusion of traditional Thai architecture and contemporary furnishing with stylish décors.",
+          "Our place is also surrounded by lush tropical gardens that provide a refreshing change of pace. You can have a peaceful retreat at our Yoga Shala.",
+        ]}
+      />
+
+      <SunsetVistaHero
+        title="Satisfaction, serenity, solace"
+        description="All these wondrous things and more await you at the Joy Beach Villas."
+        imgSrc="/sea.png"
+        key={1}
+        scrollView={false}
+      />
+
+      <GivingBackEnvironment />
 
       <FeatureSection
         eyebrow="Garden Pool Area"
@@ -30,14 +76,16 @@ export default function Home() {
         title="Your place to relax your soul"
         description="Our vast yoga area can accommodate up to 35 guests and comes with all meditation or yoga class essentials. Moreover, it is surrounded by a magnificent garden and overlooks our scenic pool. "
         imgSrc="/relax.png"
-        key={1}
+        key={2}
       />
+
+      <GuestReviews />
 
       <SunsetVistaHero
         title="Your remarkable moments"
         description="If you are looking to stay for a week or more and share remarkable moments with those you hold dearest, any one of our 13 villas is the perfect place for you. Just to let you in on a little spoiler – you can never spend too much time celebrating the good life at Koh Phangan and the joyful experiences that we have to offer. Every moment spent here is pure bliss. "
         imgSrc="/sunset.png"
-        key={2}
+        key={3}
       />
 
       <HowToGetHere />
@@ -49,8 +97,10 @@ export default function Home() {
           the fresh air breezing through the beautiful tropical gardens. Dip
           your toes in the infinity pools."
         imgSrc="/sunset.png"
-        key={3}
+        key={4}
       />
+
+      <FaqContainer />
     </main>
   );
 }
