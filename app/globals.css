@@ -128,3 +128,28 @@ html {
     @apply font-sans;
   }
 }
+
+/* Custom Thin Scrollbar */
+html {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--primary) var(--muted);
+}
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1c95c8; /* slightly darker primary */
+}

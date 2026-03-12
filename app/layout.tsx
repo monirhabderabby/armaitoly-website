@@ -25,6 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${poppins.variable} font-(family-name:--font-poppins) antialiased`}
+        suppressHydrationWarning
       >
         <AppProvider>
           {" "}
