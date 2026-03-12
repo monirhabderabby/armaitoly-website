@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HowToGetHere() {
   return (
@@ -95,8 +96,8 @@ export default function HowToGetHere() {
 
             {/* CTA */}
             <div className="mt-2">
-              <a
-                href="#directions"
+              <Link
+                href="/about"
                 className="inline-flex items-center gap-2  text-xs font-semibold tracking-[0.06em] uppercase px-5 py-2.5 rounded-sm bg-[#24a9e1] text-white transition-all duration-200 hover:bg-[#1a95cc] hover:-translate-y-px shadow-sm shadow-[#24a9e1]/30 hover:shadow-md hover:shadow-[#24a9e1]/25"
               >
                 Check how to get here
@@ -115,7 +116,7 @@ export default function HowToGetHere() {
                     strokeLinejoin="round"
                   />
                 </svg>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

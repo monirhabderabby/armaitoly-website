@@ -2,6 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "@/components/ui/language-switcher";
+import { useMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 import "flag-icons/css/flag-icons.min.css";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
@@ -12,6 +14,8 @@ import { useState } from "react";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+
+  const isMobile = useMobile();
 
   const navItems = [
     { label: "Home", href: "/" },
@@ -26,10 +30,20 @@ export default function Navbar() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <nav className="fixed top-5 left-0 right-0 z-50 w-full px-6 py-4">
+    <nav
+      className={cn(
+        "fixed left-0 right-0 z-50 w-full px-6 py-4",
+        isMobile ? "top-0" : "top-5",
+      )}
+    >
       <div className="max-w-7xl mx-auto">
         {/* Glassy background */}
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-md border border-white/20 rounded-2xl -z-10 max-w-325 mx-auto px-4" />
+        <div
+          className={cn(
+            `absolute inset-0 bg-black/30 backdrop-blur-md border border-white/20  -z-10 max-w-325 mx-auto px-4`,
+            isMobile ? "rounded-none" : "rounded-2xl",
+          )}
+        />
 
         <div className="relative flex items-center justify-between">
           {/* Logo */}
