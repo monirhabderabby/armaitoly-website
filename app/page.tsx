@@ -2,6 +2,7 @@ import FeatureSection from "@/components/shared/features-section";
 import Hero from "@/components/shared/hero/hero";
 import GivingBackEnvironment from "./_components/giving-back-environment";
 import GuestReviews from "./_components/guest-reviews";
+import HomePageVillaContainer from "./_components/home-page-villa-container";
 import HowToGetHere from "./_components/how-to-get-here";
 import SunsetVistaHero from "./_components/sunset-vista-hero";
 import FaqContainer from "./faq/_components/faq-container";
@@ -14,6 +15,8 @@ export default function Home() {
         description="Your perfect home away from home"
         imageSrc="/hero/hero.png"
       />
+
+      <HomePageVillaContainer />
 
       {/* Image on the RIGHT */}
       <FeatureSection
