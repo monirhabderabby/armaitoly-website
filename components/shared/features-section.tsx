@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import FeatureCTA from "./feature-cta";
 
@@ -11,6 +12,7 @@ interface Props {
   imgAlt?: string;
   cta?: string;
   ctaHref?: string;
+  accent?: string;
 }
 
 export default function FeatureSection({
@@ -23,6 +25,7 @@ export default function FeatureSection({
   imgAlt = "",
   cta,
   ctaHref = "#",
+  accent,
 }: Props) {
   return (
     <section className="w-full py-16 sm:py-20 lg:py-24 bg-white">
@@ -85,47 +88,36 @@ export default function FeatureSection({
           </div>
 
           {/* ── Image column ── */}
-          <div className={`relative ${reverse ? "lg:[direction:ltr]" : ""}`}>
-            {/* Decorative accent behind image */}
-            <div className="absolute -inset-3 rounded-xl bg-[#24a9e1]/6 -z-10" />
+          <div
+            className={`relative group ${reverse ? "lg:[direction:ltr]" : ""}`}
+          >
+            {/* Color shape */}
+            <div className="absolute inset-0 bg-[#24A9E1] rounded-lg -z-10 transition-transform duration-500 group-hover:translate-x-3 group-hover:translate-y-3" />
 
-            <div className="relative overflow-hidden rounded-lg shadow-lg shadow-black/10 aspect-4/3 w-full">
+            {/* Decorative accent */}
+            <div className="absolute -inset-3 rounded-xl bg-[#24a9e1]/6 -z-20" />
+
+            <div className="relative  rounded-lg shadow-lg shadow-black/10 aspect-4/3 w-full">
               <Image
                 src={imgSrc}
                 alt={imgAlt}
                 fill
-                className="object-cover object-center transition-transform duration-700 hover:scale-[1.03]"
+                className="object-cover object-center transition-transform duration-700 hover:scale-[1.03] z-30"
               />
-              {/* Subtle inner shadow for depth */}
+              {/* Inner shadow */}
               <div className="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.06)] rounded-lg pointer-events-none" />
-            </div>
 
-            {/* Floating stat badge */}
-            {/* <div className="absolute -bottom-4 -left-4 sm:-bottom-5 sm:-left-5 bg-white rounded-lg px-4 py-3 shadow-md shadow-black/10 border border-slate-100 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-md bg-[#24a9e1]/10">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path
-                    d="M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8z"
-                    stroke="#24a9e1"
-                    strokeWidth="1.4"
+              {accent && (
+                <div className="relative w-full h-full left-12">
+                  <div
+                    className={cn(
+                      " absolute inset-0 w-auto h-full top-10 left-0 z-10 rounded-none",
+                      accent,
+                    )}
                   />
-                  <path
-                    d="M8 5v3l2 2"
-                    stroke="#24a9e1"
-                    strokeWidth="1.4"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </div>
-              <div>
-                <p className="font-sans text-[10px] text-slate-400 tracking-wide uppercase font-medium">
-                  Capacity
-                </p>
-                <p className="font-sans text-sm font-bold text-slate-800 leading-tight">
-                  Up to 24 guests
-                </p>
-              </div>
-            </div> */}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

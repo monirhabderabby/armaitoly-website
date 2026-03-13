@@ -110,7 +110,7 @@ function PinIcon({ color }: { color: string }) {
 
 export default function WhereToGo() {
   return (
-    <section className="bg-white px-4 py-6 max-w-4xl mx-auto">
+    <section className="bg-white px-4 py-6 max-w-325 mx-auto">
       {/* Header */}
       <div className="text-center mb-4">
         <h1 className="font-sans text-2xl sm:text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-slate-900">
