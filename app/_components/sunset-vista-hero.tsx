@@ -32,7 +32,7 @@ export default function SunsetVistaHero({
           alt="Hin Kong Bay tropical villa with infinity pool"
           fill
           priority
-          className="object-fill object-center fixed"
+          className="object-cover object-center" // ← object-fill → object-cover, removed "fixed"
         />
 
         <div className="absolute inset-0 bg-black/50" />
