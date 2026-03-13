@@ -1,5 +1,12 @@
 import FeatureSection from "@/components/shared/features-section";
 import Hero from "@/components/shared/hero/hero";
+import { baseUrl } from "@/constants";
+import { HomePagePropertyResponse } from "@/types/property";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import GivingBackEnvironment from "./_components/giving-back-environment";
 import GuestReviews from "./_components/guest-reviews";
 import HomePageVillaContainer from "./_components/home-page-villa-container";
@@ -7,7 +14,28 @@ import HowToGetHere from "./_components/how-to-get-here";
 import SunsetVistaHero from "./_components/sunset-vista-hero";
 import FaqContainer from "./faq/_components/faq-container";
 
-export default function Home() {
+async function prefetchHomePageProperty(queryClient: QueryClient) {
+  await queryClient.prefetchQuery({
+    queryKey: ["home-page-property"],
+    queryFn: async (): Promise<HomePagePropertyResponse> => {
+      const res = await fetch(`${baseUrl}/property/home-page`, {
+        method: "GET",
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message ?? "Failed to fetch home page properties");
+      }
+
+      return res.json();
+    },
+  });
+}
+
+export default async function Home() {
+  const queryClient = new QueryClient();
+  await prefetchHomePageProperty(queryClient);
+
   return (
     <main className="min-h-screen">
       <Hero
@@ -16,7 +44,9 @@ export default function Home() {
         imageSrc="/hero/hero.png"
       />
 
-      <HomePageVillaContainer />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <HomePageVillaContainer />
+      </HydrationBoundary>
 
       {/* Image on the RIGHT */}
       <FeatureSection
