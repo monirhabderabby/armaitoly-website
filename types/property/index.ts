@@ -46,3 +46,10 @@ export interface HomePagePropertyResponse {
   message: string;
   data: Villa[];
 }
+
+export interface SinglePropertyResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: Villa;
+}
