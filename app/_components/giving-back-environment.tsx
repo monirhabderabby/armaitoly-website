@@ -8,19 +8,32 @@ const initiatives = [
         alt="Clean Water"
         width={60}
         height={60}
+        unoptimized
       />
     ),
     text: "Our two swimming pools are disinfected with ‘salt’ instead of the much more aggressive chlorine.",
   },
   {
     icon: (
-      <Image src="/icons/batery.gif" alt="Clean Water" width={60} height={60} />
+      <Image
+        src="/icons/batery.gif"
+        alt="Clean Water"
+        width={60}
+        height={60}
+        unoptimized
+      />
     ),
     text: "We use solar panels to reduce the local energy grid (as Phangan is an island) and produce our own ‘green energy.’",
   },
   {
     icon: (
-      <Image src="/icons/water.gif" alt="Clean Water" width={60} height={60} />
+      <Image
+        src="/icons/water.gif"
+        alt="Clean Water"
+        width={60}
+        height={60}
+        unoptimized
+      />
     ),
     text: "As a plastic-free zone, all villas have glass bottles, which can be refilled for free in the refilling stations at the reception area and Yoga Shala. ",
   },
@@ -31,6 +44,7 @@ const initiatives = [
         alt="Clean Water"
         width={60}
         height={60}
+        unoptimized
       />
     ),
     text: "Organic shower gel and shampoo are provided. ",
@@ -42,6 +56,7 @@ const initiatives = [
         alt="Clean Water"
         width={60}
         height={60}
+        unoptimized
       />
     ),
     text: "All our air-conditioning units are inverters, which allow less carbon dioxide emission. We also use energy-efficient LED bulbs and highly encourage everyone to reduce electricity usage by switching off lights and other machines when not in use or when the villas are empty. ",
@@ -53,6 +68,7 @@ const initiatives = [
         alt="Clean Water"
         width={60}
         height={60}
+        unoptimized
       />
     ),
     text: "A recycling station can also be found at the main entrance. Guests are requested to segregate their garbage.",

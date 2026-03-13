@@ -24,11 +24,15 @@ export interface Villa {
   capacity: VillaCapacity;
   minimumStay: VillaMinimumStay[];
   bedroom: string[];
+  bathroom: string[];
   description: string;
   amenities: string[];
-  foodAndDrinks: string[];
+  internet: string[];
+  kitchen: string[];
+  locationFeatures: string[];
+  pets: string[];
   poolAndWellness: string[];
-  bathroom: string[];
+  services?: string[]; // optional — not present on all villas
   offers: string[];
   cleaningFee: number;
   securityDeposit: number;
