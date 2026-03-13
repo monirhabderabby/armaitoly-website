@@ -456,7 +456,7 @@ export default function SinglePropertyContainer({
             </div>
 
             {/* Internet */}
-            <div className="mx-auto">
+            <div className="md:mx-auto">
               <SectionHeading title="Internet" />
               <div className="flex flex-wrap gap-2">
                 {villa.internet.map((i) => (
@@ -470,7 +470,7 @@ export default function SinglePropertyContainer({
               </div>
             </div>
             {/* Location */}
-            <div className="mx-auto">
+            <div className="md:mx-auto">
               <SectionHeading title="Location" />
               <div className="flex flex-wrap gap-2">
                 {villa.locationFeatures.map((a) => (
