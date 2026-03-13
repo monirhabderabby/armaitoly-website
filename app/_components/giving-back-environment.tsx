@@ -10,19 +10,19 @@ const initiatives = [
         height={60}
       />
     ),
-    text: "Our two swimming pools are disinfected with 'salt' instead of the much more aggressive chlorine.",
+    text: "Our two swimming pools are disinfected with ‘salt’ instead of the much more aggressive chlorine.",
   },
   {
     icon: (
       <Image src="/icons/batery.gif" alt="Clean Water" width={60} height={60} />
     ),
-    text: "We use solar panels to reduce the local energy grid (as Phangan is an island) and produce our own 'green energy.'",
+    text: "We use solar panels to reduce the local energy grid (as Phangan is an island) and produce our own ‘green energy.’",
   },
   {
     icon: (
       <Image src="/icons/water.gif" alt="Clean Water" width={60} height={60} />
     ),
-    text: "As a plastic-free zone, all villas have glass bottles, which can be refilled for free in the refilling stations at the reception area and Yoga Shala.",
+    text: "As a plastic-free zone, all villas have glass bottles, which can be refilled for free in the refilling stations at the reception area and Yoga Shala. ",
   },
   {
     icon: (
@@ -33,7 +33,7 @@ const initiatives = [
         height={60}
       />
     ),
-    text: "Organic shower gel and shampoo are provided.",
+    text: "Organic shower gel and shampoo are provided. ",
   },
   {
     icon: (
@@ -44,7 +44,7 @@ const initiatives = [
         height={60}
       />
     ),
-    text: "All our air-conditioning units are inverters, which allow less carbon dioxide emission. We also use energy-efficient LED bulbs and highly encourage everyone to reduce electricity usage by switching off lights and other machines when not in use or when the villas are empty.",
+    text: "All our air-conditioning units are inverters, which allow less carbon dioxide emission. We also use energy-efficient LED bulbs and highly encourage everyone to reduce electricity usage by switching off lights and other machines when not in use or when the villas are empty. ",
   },
   {
     icon: (
@@ -61,11 +61,11 @@ const initiatives = [
 
 export default function GivingBackEnvironment() {
   return (
-    <section className="w-full bg-white py-16 sm:py-20 lg:py-24">
+    <section className="w-full bg-white py-16 sm:py-20 lg:py-24" id="eco">
       <div className="max-w-325 mx-auto px-5 sm:px-8 lg:px-12">
         {/* ── Header ── */}
         <div className="flex flex-col items-center text-center mb-12 lg:mb-16">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-slate-900 mb-1.5">
+          <h2 className=" text-2xl sm:text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-slate-900 mb-1.5">
             Giving Back to the Environment
           </h2>
           <div className="flex items-center gap-2">

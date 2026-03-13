@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import FeatureCTA from "./feature-cta";
 
 interface Props {
   reverse?: boolean;
@@ -48,7 +48,7 @@ export default function FeatureSection({
 
             {/* Headline */}
             <div>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-slate-900">
+              <h2 className=" text-2xl sm:text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-slate-900">
                 {title}
               </h2>
               <div className="flex items-center gap-2 mt-1">
@@ -81,25 +81,7 @@ export default function FeatureSection({
             </div>
 
             {/* CTA */}
-            {cta && (
-              <div className="mt-1">
-                <Link
-                  href={ctaHref}
-                  className="inline-flex items-center gap-2 font-sans text-[11px] font-semibold tracking-[0.07em] uppercase px-5 py-2.5 rounded-sm bg-[#24a9e1] text-white transition-all duration-200 hover:bg-[#1a95cc] hover:-translate-y-px shadow-sm shadow-[#24a9e1]/25 hover:shadow-md"
-                >
-                  {cta}
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path
-                      d="M2 6h8M6.5 3l3.5 3-3.5 3"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </Link>
-              </div>
-            )}
+            {cta && <FeatureCTA cta={cta} ctaHref={ctaHref} />}
           </div>
 
           {/* ── Image column ── */}

@@ -11,7 +11,7 @@ const reviews = [
     bg: "bg-[#f0faff]",
   },
   {
-    avatar: "/profile/tom.png",
+    avatar: "/staff.avif",
     name: "Tom Shay",
     title: '"The staff was extremely nice and responsive"',
     rating: 5,
@@ -21,7 +21,7 @@ const reviews = [
   },
   {
     avatar: "/profile/qelaz.png",
-    name: "Desiree Qelaj",
+    name: "Laura Hofmann",
     title: '"The Beachfront Villa is a dream"',
     rating: 5,
     body: "The Joy Resort is a beautiful resort in a prime location in Koh Phangan. The bungalows/villas are beautiful and very large (living room/kitchen, bedroom, bathroom and a very large terrace. We had the beach front villa and it was a dream. The whole Joy Resort team is incredibly nice and helpful. We'll be back very soon once again.",
@@ -48,7 +48,7 @@ export default function GuestReviews() {
       <div className="max-w-325 mx-auto px-5 sm:px-8 lg:px-12">
         {/* ── Header ── */}
         <div className="flex flex-col items-center text-center mb-12">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-slate-900 mb-1.5">
+          <h2 className=" text-2xl sm:text-3xl font-semibold leading-[1.1] tracking-[-0.02em] text-slate-900 mb-1.5">
             What our guests say
           </h2>
           <div className="flex items-center gap-2">
@@ -59,7 +59,7 @@ export default function GuestReviews() {
               height={20}
               className="h-4 w-auto object-contain"
             />
-            <span className="font-sans text-sm font-semibold text-[#24a9e1] tracking-[-0.01em]">
+            <span className="font-sans text-sm font-medium text-[#24a9e1] tracking-[-0.01em]">
               Check out our recent reviews
             </span>
           </div>
@@ -114,27 +114,6 @@ export default function GuestReviews() {
               <p className="font-sans text-xs leading-relaxed text-slate-500">
                 {review.body}
               </p>
-            </div>
-          ))}
-        </div>
-
-        {/* ── Trust bar ── */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-6 sm:gap-10">
-          {[
-            { value: "4.9", label: "Average rating" },
-            { value: "200+", label: "Verified reviews" },
-            { value: "98%", label: "Would recommend" },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              className="flex flex-col items-center gap-0.5"
-            >
-              <span className="font-serif text-xl font-bold text-slate-900 tracking-tight">
-                {stat.value}
-              </span>
-              <span className="font-sans text-[10px] uppercase tracking-[0.15em] text-slate-400 font-medium">
-                {stat.label}
-              </span>
             </div>
           ))}
         </div>

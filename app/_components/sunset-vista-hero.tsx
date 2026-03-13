@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 interface Props {
@@ -6,6 +7,7 @@ interface Props {
   em?: string;
   imgSrc: string;
   scrollView?: boolean;
+  className?: string;
 }
 
 export default function SunsetVistaHero({
@@ -14,9 +16,15 @@ export default function SunsetVistaHero({
   em,
   imgSrc,
   scrollView = true,
+  className,
 }: Props) {
   return (
-    <section className="relative w-full py-20 max-h-195 h-auto overflow-hidden flex items-center justify-center">
+    <section
+      className={cn(
+        className,
+        "relative w-full py-20 max-h-195 h-auto overflow-hidden flex items-center justify-center",
+      )}
+    >
       {/* ── Fixed background image ── */}
       <div className="absolute inset-0 -z-10 ">
         <Image
@@ -24,7 +32,7 @@ export default function SunsetVistaHero({
           alt="Hin Kong Bay tropical villa with infinity pool"
           fill
           priority
-          className="object-cover object-center fixed"
+          className="object-fill object-center fixed"
         />
 
         <div className="absolute inset-0 bg-black/50" />
@@ -37,7 +45,7 @@ export default function SunsetVistaHero({
       </div>
 
       {/* ── Content ── */}
-      <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-xl mx-auto select-none">
+      <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-xl mx-auto ">
         {/* Headline */}
         <h2 className=" text-3xl sm:text-4xl md:text-4xl font-bold leading-[1.06] tracking-[-0.02em] text-white mb-2.5 animate-[fadeUp_0.6s_80ms_cubic-bezier(.22,1,.36,1)_both]">
           {title}

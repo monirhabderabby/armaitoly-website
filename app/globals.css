@@ -134,6 +134,7 @@ html {
 html {
   scrollbar-width: thin; /* Firefox */
   scrollbar-color: var(--primary) var(--muted);
+  scroll-behavior: smooth;
 }
 
 /* Chrome, Edge, Safari */
