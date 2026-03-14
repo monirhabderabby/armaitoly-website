@@ -2,6 +2,7 @@
 
 import { useGetSingleProperty } from "@/hooks/property/use-get-single-property";
 import Image from "next/image";
+import { useRouter } from "nextjs-toploader/app";
 import { useState } from "react";
 
 // ─── Icons (inline SVG to avoid extra deps) ──────────────────────────────────
@@ -185,6 +186,8 @@ export default function SinglePropertyContainer({
 }: SinglePropertyContainerProps) {
   const { data, isLoading, isError } = useGetSingleProperty(roomId);
   const [activeImage, setActiveImage] = useState(0);
+
+  const router = useRouter();
 
   // ── Loading ────────────────────────────────────────────────────────────────
   if (isLoading) {
@@ -644,6 +647,11 @@ export default function SinglePropertyContainer({
               <button
                 className="w-full rounded-xl py-3.5 text-sm font-bold text-white shadow-md transition-all duration-200 hover:opacity-90 hover:shadow-lg active:scale-95"
                 style={{ backgroundColor: "#24a9e1" }}
+                onClick={() =>
+                  router.push(
+                    `/property/${villa.name}/${villa.roomId}/checkAvailability`,
+                  )
+                }
               >
                 Check Availability
               </button>

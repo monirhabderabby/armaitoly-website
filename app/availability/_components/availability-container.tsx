@@ -129,6 +129,15 @@ function EmptyState() {
   );
 }
 
+export interface AvailabilityContainerProps {
+  // ← export the interface
+  propId: string;
+  roomId: string;
+  startDate: string;
+  endDate: string;
+  onNext: (checkIn: string, checkOut: string, nights: number) => void;
+}
+
 const AvailabilityContainer = () => {
   // const router = useRouter();
   // const searchParams = useSearchParams();
