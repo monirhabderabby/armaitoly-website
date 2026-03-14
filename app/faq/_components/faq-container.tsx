@@ -1,5 +1,6 @@
 "use client";
 
+import { useGetSingleBlog } from "@/hooks/blogs/use-get-single-blog";
 import { useGetAllFaqs } from "@/hooks/faqs/use-get-all-faqs";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Search } from "lucide-react";
@@ -9,6 +10,12 @@ const FaqContainer = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
   const { data, isLoading, isError } = useGetAllFaqs();
+
+  const { data: blogRes } = useGetSingleBlog({
+    id: "69b3f67aef706229587374ff",
+  });
+
+  const content = blogRes?.data.content ?? "";
 
   const faqs = useMemo(() => data?.data ?? [], [data]);
 
@@ -162,7 +169,7 @@ const FaqContainer = () => {
     [&_ul]:list-disc [&_ul]:pl-5 
     [&_ol]:list-decimal [&_ol]:pl-5
      [&_li]:my-2"
-                          dangerouslySetInnerHTML={{ __html: faq.answer }}
+                          dangerouslySetInnerHTML={{ __html: content }}
                         />
                       </motion.div>
                     )}
