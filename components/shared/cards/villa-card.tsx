@@ -18,8 +18,8 @@ function getViewLabel(location: string): string {
 function GuestIcon() {
   return (
     <svg
-      width="22"
-      height="22"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -36,8 +36,8 @@ function GuestIcon() {
 function BedroomIcon() {
   return (
     <svg
-      width="22"
-      height="22"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -52,8 +52,8 @@ function BedroomIcon() {
 function ViewIcon() {
   return (
     <svg
-      width="22"
-      height="22"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -68,8 +68,8 @@ function ViewIcon() {
 function SizeIcon() {
   return (
     <svg
-      width="22"
-      height="22"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -122,7 +122,7 @@ export default function VillaCard({
     <article
       className={`
         group grid grid-cols-1 md:grid-cols-2 min-h-85
-        rounded-sm overflow-hidden 
+        rounded-sm overflow-hidden border-gray-400 border
         bg-white transition-shadow duration-300 
         ${reversed ? "md:[direction:rtl]" : ""}
       `}
@@ -141,7 +141,7 @@ export default function VillaCard({
       </div>
 
       {/* ── content ── */}
-      <div className="flex flex-col justify-center gap-2.5 px-8 py-10 md:px-11 [direction:ltr]">
+      <div className="flex flex-col justify-center gap-2.5 px-4 py-10 md:px-11 [direction:ltr]">
         {/* name */}
         <h2 className=" text-[1.50rem] font-semibold text-[#1a2e3b] leading-tight tracking-tight m-0">
           {villa.name}
@@ -172,7 +172,7 @@ export default function VillaCard({
               className="flex flex-col items-center gap-1.5 text-[#4a6274] min-w-14"
             >
               <span className="text-[#24a9e1]">{icon}</span>
-              <span className="text-[0.72rem] font-semibold uppercase tracking-wide">
+              <span className="text-[11px] font-semibold uppercase tracking-wide">
                 {label}
               </span>
             </div>
