@@ -4,6 +4,7 @@
 import { AvailabilityDate } from "@/types/availablity";
 import { Villa, VillaMinimumStay } from "@/types/property";
 import { useMemo, useState } from "react";
+import PolicyContainer from "./policy-container";
 
 export interface OnBookingSubmitProps {
   checkIn: string;
@@ -526,6 +527,8 @@ export default function AvailabilityCalendar({
           </p>
         </div>
       )}
+
+      <PolicyContainer />
 
       {/* ── Price breakdown + CTA ── */}
       {checkIn && checkOut && nights && pricing && (

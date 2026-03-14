@@ -26,7 +26,7 @@ const Page = async ({ params, searchParams }: PageProps) => {
   );
 
   return (
-    <div className="py-36 max-w-325 mx-auto px-4">
+    <div className="py-20 md:py-36 max-w-250 mx-auto px-4">
       <AvailabilityEntry
         propId={propId ?? ""}
         roomId={roomId}

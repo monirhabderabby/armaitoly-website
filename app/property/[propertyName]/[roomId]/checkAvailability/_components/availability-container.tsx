@@ -331,11 +331,27 @@ export default function AvailabilityContainer({
   }
 
   return (
-    <AvailabilityCalendar
-      dates={availabilityData.data.dates} // availabilityData.data.dates
-      minimumStay={minimumStay} // minimumStay
-      onSelect={onNext}
-      villa={room!}
-    />
+    <>
+      <div className="text-center max-w-2xl mx-auto mb-12">
+        <span className="inline-block px-3 py-1 text-xs font-medium tracking-wide text-primary bg-primary/10 rounded-full mb-4">
+          Reserve Your Stay
+        </span>
+
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
+          Book <span className="text-primary">{room.name}</span>
+        </h1>
+
+        <p className="mt-4 text-muted-foreground text-sm md:text-base leading-relaxed max-w-md mx-auto">
+          Select your dates and secure your Italian escape. Best rates
+          guaranteed when booking directly.
+        </p>
+      </div>
+      <AvailabilityCalendar
+        dates={availabilityData.data.dates} // availabilityData.data.dates
+        minimumStay={minimumStay} // minimumStay
+        onSelect={onNext}
+        villa={room!}
+      />
+    </>
   );
 }
