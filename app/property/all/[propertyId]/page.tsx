@@ -7,7 +7,7 @@ interface PageProps {
 const page = async ({ params }: PageProps) => {
   const { propertyId } = await params;
   return (
-    <div className="py-10 md:py-20 bg-[#f9fbfc] px-4">
+    <div className="py-0 md:py-20 bg-[#f9fbfc] px-4">
       <AllVillasContainer propId={propertyId} />
     </div>
   );
