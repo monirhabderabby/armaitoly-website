@@ -131,7 +131,7 @@ function calcReadingTime(html: string): number {
 
 // ── Main Component ────────────────────────────────────────────────────────────
 
-export function BlogContainer({ blogId }: Props) {
+export default function SingleBlogContainer({ blogId }: Props) {
   const { data, isLoading, isError, error } = useGetSingleBlog({ id: blogId });
 
   if (isLoading) return <BlogSkeleton />;

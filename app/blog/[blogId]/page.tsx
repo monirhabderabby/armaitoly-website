@@ -1,4 +1,4 @@
-import { BlogContainer } from "./_components/blog-container";
+import SingleBlogContainer from "./_components/blog-container";
 
 interface Props {
   params: Promise<{ blogId: string }>;
@@ -7,7 +7,7 @@ interface Props {
 const Page = async ({ params }: Props) => {
   const { blogId } = await params;
 
-  return <BlogContainer blogId={blogId} />;
+  return <SingleBlogContainer blogId={blogId} />;
 };
 
 export default Page;
