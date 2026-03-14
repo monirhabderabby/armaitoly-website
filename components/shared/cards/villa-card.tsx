@@ -122,7 +122,7 @@ export default function VillaCard({
     <article
       className={`
         group grid grid-cols-1 md:grid-cols-2 min-h-85
-        rounded-sm overflow-hidden border-gray-400 border
+        rounded-sm overflow-hidden border-gray-400/50 border
         bg-white transition-shadow duration-300 
         ${reversed ? "md:[direction:rtl]" : ""}
       `}
