@@ -9,11 +9,13 @@ import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { useState } from "react";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   const isMobile = useMobile();
 
@@ -80,6 +82,7 @@ export default function Navbar() {
             <Button
               className="bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg px-6 py-2 text-sm font-medium transition-all"
               size="sm"
+              onClick={() => router.push("/availability")}
             >
               Check Availability
             </Button>

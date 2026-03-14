@@ -15,6 +15,13 @@ export interface VillaMinimumStay {
   nights: number;
 }
 
+export interface Pagination {
+  page: number;
+  limit: number;
+  total: number;
+  pages: number;
+}
+
 export interface Villa {
   roomId: string;
   name: string;
@@ -52,4 +59,37 @@ export interface SinglePropertyResponse {
   success: boolean;
   message: string;
   data: Villa;
+}
+
+export interface Property {
+  propId: string;
+  name: string;
+  currency: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  postcode: string;
+  latitude: number;
+  longitude: number;
+  image: string;
+}
+
+export interface PropertiesResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: Property[];
+}
+
+export interface PropertyWithRooms extends Omit<Property, "image"> {
+  rooms: Villa[];
+}
+
+export interface VillasByProperIdResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: PropertyWithRooms;
+  meta: Pagination;
 }
