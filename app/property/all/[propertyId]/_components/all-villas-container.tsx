@@ -115,7 +115,7 @@ const AllVillasContainer = ({ propId }: Props) => {
       </div>
     );
   }
-  return <div className="my-36 max-w-325 mx-auto ">{content}</div>;
+  return <div className="my-20 md:my-36 max-w-325 mx-auto ">{content}</div>;
 };
 
 export default AllVillasContainer;
