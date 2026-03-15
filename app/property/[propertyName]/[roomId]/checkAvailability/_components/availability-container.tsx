@@ -2,7 +2,7 @@
 "use client";
 
 import { useGetAvailability } from "@/hooks/availability/use-get-availablity";
-import { useGetSingleProperty } from "@/hooks/property/use-get-single-property";
+import { Villa } from "@/types/property";
 import AvailabilityCalendar, {
   OnBookingSubmitProps,
 } from "./availability-calendar";
@@ -238,6 +238,7 @@ export interface AvailabilityContainerProps {
   startDate: string;
   endDate: string;
   onNext: (data: OnBookingSubmitProps) => void;
+  room: Villa;
 }
 
 function CalendarSkeleton() {
@@ -264,6 +265,7 @@ export default function AvailabilityContainer({
   startDate,
   endDate,
   onNext,
+  room,
 }: AvailabilityContainerProps) {
   const {
     data: availabilityData,
@@ -273,9 +275,9 @@ export default function AvailabilityContainer({
     refetch,
   } = useGetAvailability({ roomId, startDate, endDate });
 
-  const { data: propertyData } = useGetSingleProperty(roomId);
+  // const { data: propertyData } = useGetSingleProperty(roomId);
 
-  const room = propertyData?.data;
+  // const room = propertyData?.data;
 
   if (!room) return;
   const minimumStay = room?.minimumStay ?? [];
