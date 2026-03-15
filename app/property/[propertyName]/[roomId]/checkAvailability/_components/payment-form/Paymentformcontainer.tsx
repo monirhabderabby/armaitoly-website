@@ -1,5 +1,6 @@
 "use client";
 
+import moment from "moment";
 import { useState } from "react";
 import { BookingSummary, VillaInfo } from "./Bookingsummary";
 import { CardInfoForm } from "./Cardinfoform";
@@ -93,7 +94,7 @@ export default function PaymentFormContainer({
 }: PaymentFormContainerProps) {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [guestData, setGuestData] = useState<GuestData | null>(null);
-  const [voucher] = useState("");
+  const [voucher, setVoucher] = useState("");
 
   // Called by GuestInfoForm when its shadcn form passes validation
   const handleGuestNext = (data: GuestData) => {
@@ -140,7 +141,7 @@ export default function PaymentFormContainer({
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* ── LEFT: Form ───────────────────────────────────────────────────── */}
-        <div className="lg:col-span-2">
+        <div className="order-2 lg:order-1 lg:col-span-2">
           {/* STEP 1 — delegated entirely to GuestInfoForm */}
           {step === 1 && (
             <GuestInfoForm
@@ -193,8 +194,14 @@ export default function PaymentFormContainer({
                 {(
                   [
                     { label: "Property", value: villa.name },
-                    { label: "Check-in", value: villa.checkIn },
-                    { label: "Check-out", value: villa.checkOut },
+                    {
+                      label: "Check-in",
+                      value: moment(villa.checkIn).format("MMMM D, YYYY"),
+                    },
+                    {
+                      label: "Check-out",
+                      value: moment(villa.checkIn).format("MMMM D, YYYY"),
+                    },
                     { label: "Guests", value: `${villa.guests}` },
                   ] as const
                 ).map((r) => (
@@ -225,8 +232,12 @@ export default function PaymentFormContainer({
         </div>
 
         {/* ── RIGHT: Booking summary (extracted component) ──────────────────── */}
-        <div className="lg:col-span-1">
-          <BookingSummary villa={villa} />
+        <div className="order-1 lg:order-2 lg:col-span-1">
+          <BookingSummary
+            villa={villa}
+            voucher={voucher}
+            setVoucher={setVoucher}
+          />
         </div>
       </div>
     </section>

@@ -149,7 +149,7 @@ export function GuestInfoForm({ defaultValues, onNext }: GuestInfoFormProps) {
   return (
     <div className="rounded-2xl border border-gray-100 bg-white shadow-xl shadow-gray-100/80 overflow-hidden">
       {/* Header */}
-      <div className="px-6 pt-6 pb-5 border-b border-gray-100">
+      <div className="px-4 md:px-6 pt-6 pb-5 border-b border-gray-100">
         <h3 className="mb-1 text-sm font-semibold uppercase tracking-widest text-gray-400">
           Guest Information
         </h3>
@@ -162,7 +162,7 @@ export function GuestInfoForm({ defaultValues, onNext }: GuestInfoFormProps) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onNext)}
-          className="px-6 py-6 grid gap-5"
+          className="px-4 md:px-6 py-6 grid gap-5"
         >
           {/* First / Last name */}
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -349,7 +349,7 @@ export function GuestInfoForm({ defaultValues, onNext }: GuestInfoFormProps) {
           {/* CTA */}
           <Button
             type="submit"
-            className="w-full rounded-xl py-3.5 text-text-[12px] font-semibold text-white shadow-sm transition-all cursor-pointer duration-200 hover:opacity-90 hover:shadow-md active:scale-95"
+            className="w-full rounded-xl min-h-10 py-3.5 text-text-[12px] font-semibold text-white shadow-sm transition-all cursor-pointer duration-200 hover:opacity-90 hover:shadow-md active:scale-95"
             style={{ backgroundColor: "#24a9e1" }}
           >
             Continue to Payment →

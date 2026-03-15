@@ -25,7 +25,7 @@ interface CreateBookingPayload {
 export const useCreateBooking = () => {
   return useMutation({
     mutationFn: async (payload: CreateBookingPayload) => {
-      const res = await fetch(`${baseUrl}/booking/create`, {
+      const res = await fetch(`${baseUrl}/booking/createe`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

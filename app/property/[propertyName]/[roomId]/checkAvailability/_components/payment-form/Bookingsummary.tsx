@@ -1,5 +1,6 @@
 "use client";
 
+import moment from "moment";
 import { useState } from "react";
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
@@ -62,16 +63,24 @@ export interface VillaInfo {
 
 interface BookingSummaryProps {
   villa: VillaInfo;
+  setVoucher: (v: string) => void;
+  voucher: string;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
-export function BookingSummary({ villa }: BookingSummaryProps) {
-  const [voucher, setVoucher] = useState("");
+export function BookingSummary({
+  villa,
+  voucher,
+  setVoucher,
+}: BookingSummaryProps) {
   const [voucherApplied, setVoucherApplied] = useState(false);
 
   const detailRows = [
-    { label: "Check-in", value: villa.checkIn },
-    { label: "Check-out", value: villa.checkOut },
+    { label: "Check-in", value: moment(villa.checkIn).format("MMMM D, YYYY") },
+    {
+      label: "Check-out",
+      value: moment(villa.checkOut).format("MMMM D, YYYY"),
+    },
     { label: "Guests", value: `${villa.guests} guests` },
     {
       label: "Cleaning fee",
@@ -149,18 +158,20 @@ export function BookingSummary({ villa }: BookingSummaryProps) {
           <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gray-400">
             Voucher Code
           </p>
-          <div className="flex gap-2">
+
+          <div className="flex items-center gap-2">
             <input
               value={voucher}
               onChange={(e) => setVoucher(e.target.value)}
               disabled={voucherApplied}
               placeholder="Enter code"
-              className="flex-1 rounded-xl border border-gray-200 px-3 py-2 text-sm outline-none transition focus:border-[#24a9e1] focus:ring-2 focus:ring-[#24a9e1]/10 disabled:opacity-50 placeholder:text-gray-300"
+              className="flex-1 rounded-xl border border-gray-200 px-3 py-2 text-xs outline-none transition focus:border-[#24a9e1] focus:ring-2 focus:ring-[#24a9e1]/10 disabled:opacity-50 placeholder:text-gray-300"
             />
+
             <button
               onClick={() => voucher && setVoucherApplied(true)}
               disabled={!voucher || voucherApplied}
-              className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-gray-600 shadow-sm transition hover:border-[#24a9e1] hover:text-[#24a9e1] disabled:cursor-not-allowed disabled:opacity-40"
+              className="shrink-0 rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-gray-600 shadow-sm transition hover:border-[#24a9e1] hover:text-[#24a9e1] disabled:cursor-not-allowed disabled:opacity-40"
             >
               {voucherApplied ? "✓ Applied" : "Apply"}
             </button>
