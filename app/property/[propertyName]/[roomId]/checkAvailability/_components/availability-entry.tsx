@@ -2,9 +2,12 @@
 "use client";
 
 import * as ResizablePanel from "@/components/ui/resizable-panel";
+import { useCreateBooking } from "@/hooks/booking/use-booking-create";
 import { useGetSingleProperty } from "@/hooks/property/use-get-single-property";
+import { CreateBookingResponse } from "@/types/booking";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { OnBookingSubmitProps } from "./availability-calendar";
 import AvailabilityContainer from "./availability-container";
 import { GuestData } from "./payment-form/Guestinfoform";
@@ -29,7 +32,11 @@ export default function AvailabilityEntry({
   const [timeSlotsData, setTimeSlotData] =
     useState<OnBookingSubmitProps | null>(null);
 
+  const { isPending: isBookingPending, mutateAsync: createBooking } =
+    useCreateBooking();
+
   const { data, isLoading, isError, error } = useGetSingleProperty(roomId);
+
   const handleNext = (data: OnBookingSubmitProps) => {
     // const params = new URLSearchParams({
     //   checkIn: data,
@@ -42,13 +49,61 @@ export default function AvailabilityEntry({
     setState("payment");
   };
 
-  const onPayment = (data: {
+  const onPayment = async (data: {
     guest: GuestData;
     card: CardData;
     voucher: string;
-  }) => {
-    console.log(data);
+  }): Promise<boolean> => {
+    if (!timeSlotsData) {
+      toast.error("check in and check out data missing!");
+      return false; // 👈 also fix this — was returning undefined
+    }
+
+    const guest = data.guest;
+
+    return new Promise<boolean>((resolve) => {
+      // 👈 typed Promise
+      createBooking(
+        {
+          roomId: roomId,
+          firstNight: timeSlotsData.checkIn,
+          lastNight: timeSlotsData.checkOut,
+          numAdult: timeSlotsData.guests,
+          guestFirstName: guest.firstName,
+          guestName: guest.lastName,
+          guestEmail: guest.email,
+          guestMobile: guest.phone,
+          guestAddress: guest.address,
+          guestCity: guest.city,
+          guestCountry: guest.country,
+          guestPostcode: guest.postcode,
+          guestArrivalTime: guest.arrivalTime,
+          guestComments: guest.comment,
+          guestVoucher: data.voucher,
+        },
+        {
+          onError: (error) => {
+            toast.error(error.message ?? "Booking creation failed");
+            resolve(false);
+          },
+          onSuccess: (data: CreateBookingResponse) => {
+            if (!data.success) {
+              toast.error(data.message ?? "Booking creation failed");
+              resolve(false);
+              return;
+            }
+
+            // create payment now
+
+            // after successful payment
+            resolve(true);
+          },
+        },
+      );
+    });
   };
+
+  const paymentIsOngoing = isBookingPending;
 
   let content;
 
@@ -93,7 +148,7 @@ export default function AvailabilityEntry({
                   currency: currency,
                   image: image,
                 }}
-                loading={false}
+                loading={paymentIsOngoing}
               />
             )}
           </ResizablePanel.Content>

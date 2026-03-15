@@ -34,7 +34,7 @@ interface PaymentFormContainerProps {
     guest: GuestData;
     card: CardData;
     voucher: string;
-  }) => void;
+  }) => Promise<boolean>;
   loading: boolean;
 }
 
@@ -104,8 +104,12 @@ export default function PaymentFormContainer({
   // AFTER — accept cardData directly from CardInfoForm's own validated form state
   const handleSubmit = async (cardData: CardData) => {
     if (!guestData) return;
-    onSubmit?.({ guest: guestData, card: cardData, voucher });
-    setStep(3);
+    const success = await onSubmit?.({
+      guest: guestData,
+      card: cardData,
+      voucher,
+    });
+    if (success) setStep(3); // 👈
   };
 
   return (
