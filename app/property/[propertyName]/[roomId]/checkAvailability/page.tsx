@@ -26,13 +26,15 @@ const Page = async ({ params, searchParams }: PageProps) => {
   );
 
   return (
-    <div className="py-20 md:py-36 max-w-260 mx-auto px-4">
-      <AvailabilityEntry
-        propId={propId ?? ""}
-        roomId={roomId}
-        startDate={startDate ?? fmt(today)}
-        endDate={endDate ?? fmt(lastDayNextMonth)}
-      />
+    <div className="bg-gray-100">
+      <div className="py-20 md:py-36 max-w-260 mx-auto px-4 ">
+        <AvailabilityEntry
+          propId={propId ?? ""}
+          roomId={roomId}
+          startDate={startDate ?? fmt(today)}
+          endDate={endDate ?? fmt(lastDayNextMonth)}
+        />
+      </div>
     </div>
   );
 };

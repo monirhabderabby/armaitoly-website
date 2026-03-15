@@ -93,7 +93,7 @@ export default function AvailabilityEntry({
                   currency: currency,
                   image: image,
                 }}
-                loading={true}
+                loading={false}
               />
             )}
           </ResizablePanel.Content>

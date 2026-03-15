@@ -147,12 +147,14 @@ export default function VillaCard({
           {villa.name}
         </h2>
 
-        <WaveDecoration />
+        <div className="flex items-center gap-x-1.5">
+          <WaveDecoration />
 
-        {/* tagline */}
-        <p className="font-serif italic text-[#24a9e1] text-[0.95rem] m-0">
-          Views and Expansiveness
-        </p>
+          {/* tagline */}
+          <p className="font-serif italic text-[#24a9e1] text-[0.95rem] m-0">
+            Views and Expansiveness
+          </p>
+        </div>
 
         {/* description */}
         <p className="text-[0.875rem] text-slate-500 leading-relaxed m-0 line-clamp-2">
