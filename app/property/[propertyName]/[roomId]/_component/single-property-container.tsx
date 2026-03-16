@@ -427,60 +427,70 @@ export default function SinglePropertyContainer({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Amenities */}
-            <div>
-              <SectionHeading title="Amenities" />
-              <div className="flex flex-wrap gap-2">
-                {amenities.map((a) => (
-                  <Tag key={a} label={a} />
-                ))}
+            {amenities && amenities.length > 0 && (
+              <div>
+                <SectionHeading title="Amenities" />
+                <div className="flex flex-wrap gap-2">
+                  {amenities.map((a) => (
+                    <Tag key={a} label={a} />
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Kitchen */}
-            <div>
-              <SectionHeading title="kitchen" />
-              <div className="flex flex-wrap gap-2">
-                {kitchen.map((a) => (
-                  <Tag key={a} label={a} />
-                ))}
+            {kitchen && kitchen.length > 0 && (
+              <div>
+                <SectionHeading title="kitchen" />
+                <div className="flex flex-wrap gap-2">
+                  {kitchen.map((a) => (
+                    <Tag key={a} label={a} />
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* poolAndWellness */}
-            <div>
-              <SectionHeading title="Pool And Wellness" />
-              <div className="flex flex-wrap gap-2">
-                {poolAndWellness.map((a) => (
-                  <Tag key={a} label={a} />
-                ))}
+            {poolAndWellness && poolAndWellness.length > 0 && (
+              <div>
+                <SectionHeading title="Pool And Wellness" />
+                <div className="flex flex-wrap gap-2">
+                  {poolAndWellness.map((a) => (
+                    <Tag key={a} label={a} />
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Internet */}
-            <div className="md:mx-auto">
-              <SectionHeading title="Internet" />
-              <div className="flex flex-wrap gap-2">
-                {villa.internet.map((i) => (
-                  <span
-                    key={i}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-[#24a9e1]/30 bg-[#24a9e1]/5 px-3 py-1 text-xs font-medium text-[#24a9e1]"
-                  >
-                    <IconWifi /> {i}
-                  </span>
-                ))}
+            {villa?.internet?.length > 0 && (
+              <div className="md:mx-auto">
+                <SectionHeading title="Internet" />
+                <div className="flex flex-wrap gap-2">
+                  {villa.internet.map((i) => (
+                    <span
+                      key={i}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-[#24a9e1]/30 bg-[#24a9e1]/5 px-3 py-1 text-xs font-medium text-[#24a9e1]"
+                    >
+                      <IconWifi /> {i}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
             {/* Location */}
-            <div className="md:mx-auto">
-              <SectionHeading title="Location" />
-              <div className="flex flex-wrap gap-2">
-                {villa.locationFeatures.map((a) => (
-                  <Tag key={a} label={a} />
-                ))}
+            {villa?.locationFeatures?.length > 0 && (
+              <div className="md:mx-auto">
+                <SectionHeading title="Location" />
+                <div className="flex flex-wrap gap-2">
+                  {villa.locationFeatures.map((a) => (
+                    <Tag key={a} label={a} />
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Bedroom & Bathroom */}

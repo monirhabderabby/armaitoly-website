@@ -1,3 +1,4 @@
+import ChatBot from "@/components/shared/chatbot/chatbot";
 import Footer from "@/components/shared/footer/footer";
 import Navbar from "@/components/shared/navbar/navbar";
 import AppProvider from "@/providers/app-provider";
@@ -58,6 +59,8 @@ export default function RootLayout({
           src="//translate.google.com/translate_a/element.js?cb=TranslateInit"
           strategy="afterInteractive"
         />
+
+        <ChatBot apiEndpoint="https://76.13.213.232:8000/ai/api/chat-bot" />
       </body>
     </html>
   );

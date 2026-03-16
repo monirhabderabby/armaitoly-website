@@ -22,7 +22,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-linear-to-b from-[#f0f8fd] to-[#e6f4fb] border-t-[3px] border-[#24a9e1] font-[Lato,sans-serif]">
+    <footer className="bg-linear-to-b from-[#f0f8fd] to-[#e6f4fb] border-t-[3px] border-[#24a9e1] pt-10 md:pt-0">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@600&display=swap');
       `}</style>
@@ -45,7 +45,7 @@ const Footer = () => {
       */}
       <div className="grid grid-cols-2 lg:grid-cols-[1fr_1fr_1.2fr_1fr_1fr] gap-8 max-w-325 mx-auto px-8 pt-6 lg:pt-12 pb-8 items-start">
         {/* Col 1 — Info */}
-        <div className="flex flex-col gap-1 mx-auto">
+        <div className="flex flex-col gap-1 md:mx-auto">
           <h4 className={headingClass}>Info</h4>
           {items.map((item) => (
             <a
