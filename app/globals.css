@@ -139,22 +139,19 @@ html {
 }
 
 /* Chrome, Edge, Safari */
-::-webkit-scrollbar {
+html::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-
-::-webkit-scrollbar-track {
+html::-webkit-scrollbar-track {
   background: var(--muted);
 }
-
-::-webkit-scrollbar-thumb {
+html::-webkit-scrollbar-thumb {
   background: var(--primary);
   border-radius: 999px;
 }
-
-::-webkit-scrollbar-thumb:hover {
-  background: #1c95c8; /* slightly darker primary */
+html::-webkit-scrollbar-thumb:hover {
+  background: #1c95c8;
 }
 
 /* ✅ Hide Google Translate top banner */

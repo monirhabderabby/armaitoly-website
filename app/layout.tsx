@@ -1,6 +1,7 @@
 import ChatBot from "@/components/shared/chatbot/chatbot";
 import Footer from "@/components/shared/footer/footer";
 import Navbar from "@/components/shared/navbar/navbar";
+import { baseUrl } from "@/constants";
 import AppProvider from "@/providers/app-provider";
 import SmoothScrolling from "@/providers/smooth-scrolling";
 import TranslateProvider from "@/providers/translate-provider";
@@ -60,7 +61,7 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
 
-        <ChatBot apiEndpoint="https://76.13.213.232:8000/ai/api/chat-bot" />
+        <ChatBot apiEndpoint={`${baseUrl}/ai/ask-your-question`} />
       </body>
     </html>
   );
