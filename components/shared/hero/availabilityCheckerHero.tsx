@@ -783,7 +783,11 @@ export default function AvailabilityChecker({
   const canCheck: boolean = !!(checkIn && checkOut && checkOut > checkIn);
   const totalGuests: number = adults + children;
   const checkOutMin: Date | null = checkIn
-    ? new Date(checkIn.getTime() + 86400000)
+    ? new Date(
+        checkIn.getFullYear(),
+        checkIn.getMonth(),
+        checkIn.getDate() + 1, // ← safe, no timezone issues
+      )
     : null;
 
   const layoutProps: LayoutProps = {

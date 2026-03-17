@@ -28,6 +28,15 @@ function EmptyState() {
   );
 }
 
+const formatDateForApi = (dateStr: string | null): string => {
+  if (!dateStr) return "";
+  const d = new Date(dateStr);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 const AvailabilityContainer = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -59,12 +68,8 @@ const AvailabilityContainer = () => {
   };
 
   // ── format dates for the API (YYYY-MM-DD) ──────────────────────────────
-  const checkIn = searchParams.get("checkIn")
-    ? new Date(searchParams.get("checkIn")!).toISOString().split("T")[0]
-    : "";
-  const checkOut = searchParams.get("checkOut")
-    ? new Date(searchParams.get("checkOut")!).toISOString().split("T")[0]
-    : "";
+  const checkIn = formatDateForApi(searchParams.get("checkIn"));
+  const checkOut = formatDateForApi(searchParams.get("checkOut"));
 
   const { isLoading, data, isError, error, refetch } = useGetVillaByFilter({
     checkIn,
