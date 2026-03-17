@@ -1,184 +1,116 @@
 "use client";
 
-import PropertyCard from "@/components/shared/cards/property-card";
-import { useGetAllProperties } from "@/hooks/property/use-get-all-property";
+import VillaCard from "@/components/shared/cards/villa-card";
+import AvailabilityChecker, {
+  AvailabilityCheckData,
+} from "@/components/shared/hero/availabilityCheckerHero";
+import VillaCardSkeleton from "@/components/shared/skeleton/villa-card-skleton";
 
-// ── skeleton ───────────────────────────────────────────────────────────────
-function PropertyCardSkeleton({ reversed = false }: { reversed?: boolean }) {
+import { useGetVillaByFilter } from "@/hooks/availability/use-get-billa-by-filter";
+import { useRouter, useSearchParams } from "next/navigation";
+
+function ErrorState({ message }: { message: string; onRetry: () => void }) {
   return (
-    <div
-      className={`
-        grid grid-cols-1 lg:grid-cols-2 rounded-xl overflow-hidden
-        border border-slate-100 bg-white w-full max-w-4xl mx-auto
-        shadow-[0_2px_16px_rgba(0,0,0,0.06)]
-        ${reversed ? "lg:[direction:rtl]" : ""}
-      `}
-    >
-      {/* image skeleton */}
-      <div className="min-h-52 lg:min-h-0 bg-slate-100 animate-pulse [direction:ltr]" />
-
-      {/* content skeleton */}
-      <div className="flex flex-col [direction:ltr] bg-white">
-        {/* header */}
-        <div className="px-5 pt-5 pb-4 border-b border-slate-100 space-y-2.5">
-          <div className="h-3 w-28 bg-slate-100 rounded-full animate-pulse" />
-          <div className="h-4 w-40 bg-slate-100 rounded-full animate-pulse" />
-          <div className="flex gap-2">
-            <div className="h-5 w-16 bg-slate-100 rounded-md animate-pulse" />
-            <div className="h-5 w-14 bg-slate-100 rounded-md animate-pulse" />
-          </div>
-        </div>
-
-        {/* cta skeleton */}
-        <div className="px-5 py-4 flex items-center justify-between">
-          <div className="space-y-1.5">
-            <div className="h-2.5 w-16 bg-slate-100 rounded-full animate-pulse" />
-            <div className="h-3.5 w-12 bg-slate-100 rounded-full animate-pulse" />
-          </div>
-          <div className="h-8 w-28 bg-slate-100 rounded-lg animate-pulse" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── error state ────────────────────────────────────────────────────────────
-function ErrorState({
-  message,
-  onRetry,
-}: {
-  message: string;
-  onRetry: () => void;
-}) {
-  return (
-    <div className="max-w-sm mx-auto text-center py-12">
-      <div className="w-10 h-10 rounded-full bg-red-50 border border-red-100 flex items-center justify-center mx-auto mb-4">
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#ef4444"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="8" x2="12" y2="12" />
-          <line x1="12" y1="16" x2="12.01" y2="16" />
-        </svg>
-      </div>
-      <h3 className="text-[0.9rem] font-semibold text-slate-700 mb-1">
-        Failed to load properties
+    <div className="flex flex-col items-center justify-center py-24 text-center">
+      <h3 className="text-xl font-semibold text-red-500">
+        Something went wrong
       </h3>
-      <p className="text-[0.8rem] text-slate-400 mb-5 leading-relaxed">
-        {message}
-      </p>
-      <button
-        onClick={onRetry}
-        className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.05em] uppercase px-4 py-2 rounded-lg bg-[#0f1f2e] text-white hover:bg-[#1a3550] transition-all duration-200 cursor-pointer"
-      >
-        <svg
-          width="10"
-          height="10"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
-          <path d="M21 3v5h-5" />
-          <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
-          <path d="M8 16H3v5" />
-        </svg>
-        Try again
-      </button>
+      <p className="text-muted-foreground mt-2">{message}</p>
     </div>
   );
 }
 
-// ── empty state ────────────────────────────────────────────────────────────
 function EmptyState() {
   return (
-    <div className="max-w-sm mx-auto text-center py-12">
-      <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center mx-auto mb-4">
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#94a3b8"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-        </svg>
-      </div>
-      <h3 className="text-[0.9rem] font-semibold text-slate-700 mb-1">
-        No properties found
-      </h3>
-      <p className="text-[0.8rem] text-slate-400 leading-relaxed">
-        There are no available properties at the moment. Please check back
-        later.
-      </p>
+    <div className="py-24 flex flex-col justify-center items-center">
+      <p className="text-muted-foreground mt-2">NO Room Found</p>
     </div>
   );
-}
-
-export interface AvailabilityContainerProps {
-  // ← export the interface
-  propId: string;
-  roomId: string;
-  startDate: string;
-  endDate: string;
-  onNext: (checkIn: string, checkOut: string, nights: number) => void;
 }
 
 const AvailabilityContainer = () => {
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  // // Parse existing params to pre-fill the form
-  // const defaultCheckIn = searchParams.get("checkIn")
-  //   ? new Date(searchParams.get("checkIn")!)
-  //   : null;
-  // const defaultCheckOut = searchParams.get("checkOut")
-  //   ? new Date(searchParams.get("checkOut")!)
-  //   : null;
-  // const defaultAdults = searchParams.get("adults")
-  //   ? Number(searchParams.get("adults"))
-  //   : 2;
-  // const defaultChildren = searchParams.get("children")
-  //   ? Number(searchParams.get("children"))
-  //   : 0;
+  const defaultCheckIn = searchParams.get("checkIn")
+    ? new Date(searchParams.get("checkIn")!)
+    : null;
+  const defaultCheckOut = searchParams.get("checkOut")
+    ? new Date(searchParams.get("checkOut")!)
+    : null;
+  const defaultAdults = searchParams.get("adults")
+    ? Number(searchParams.get("adults"))
+    : 2;
+  const defaultChildren = searchParams.get("children")
+    ? Number(searchParams.get("children"))
+    : 0;
 
-  // const onAvailabilityCheck = (data: AvailabilityCheckData) => {
-  //   const params = new URLSearchParams({
-  //     checkIn: data.checkIn.toISOString(),
-  //     checkOut: data.checkOut.toISOString(),
-  //     adults: data.adults.toString(),
-  //     children: data.children.toString(),
-  //     nights: data.nights.toString(),
-  //     totalGuests: data.totalGuests.toString(),
-  //   });
+  const onAvailabilityCheck = (data: AvailabilityCheckData) => {
+    const params = new URLSearchParams({
+      checkIn: data.checkIn.toISOString(),
+      checkOut: data.checkOut.toISOString(),
+      adults: data.adults.toString(),
+      children: data.children.toString(),
+      nights: data.nights.toString(),
+      totalGuests: data.totalGuests.toString(),
+    });
 
-  //   // Update URL with new selection without full navigation
-  //   router.replace(`/availability?${params.toString()}`);
-  // };
+    router.replace(`/availability?${params.toString()}`);
+  };
 
-  const { isLoading, data, isError, error, refetch } = useGetAllProperties();
+  // ── format dates for the API (YYYY-MM-DD) ──────────────────────────────
+  const checkIn = searchParams.get("checkIn")
+    ? new Date(searchParams.get("checkIn")!).toISOString().split("T")[0]
+    : "";
+  const checkOut = searchParams.get("checkOut")
+    ? new Date(searchParams.get("checkOut")!).toISOString().split("T")[0]
+    : "";
+
+  const { isLoading, data, isError, error, refetch } = useGetVillaByFilter({
+    checkIn,
+    checkOut,
+    numAdult: defaultAdults,
+    numChild: defaultChildren,
+  });
 
   let content;
+  const hasParams = checkIn && checkOut;
 
-  if (isLoading) {
+  if (!hasParams) {
+    content = (
+      <div className="flex flex-col items-center justify-center py-24 text-center gap-3">
+        <div className="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#94a3b8"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+        </div>
+        <h3 className="text-base font-semibold text-slate-700">
+          Find your perfect stay
+        </h3>
+        <p className="text-sm text-slate-400 max-w-xs leading-relaxed">
+          Select your check-in, check-out dates and number of guests above to
+          browse available villas.
+        </p>
+      </div>
+    );
+  } else if (isLoading) {
     content = (
       <div className="grid gap-5">
-        <PropertyCardSkeleton />
-        <PropertyCardSkeleton reversed />
+        <VillaCardSkeleton />
+        <VillaCardSkeleton />
+        <VillaCardSkeleton />
       </div>
     );
   } else if (isError) {
@@ -191,26 +123,29 @@ const AvailabilityContainer = () => {
   } else if (data && data.data.length === 0) {
     content = <EmptyState />;
   } else if (data && data.data.length > 0) {
-    const properties = data.data;
     content = (
-      <div className="grid gap-5">
-        {properties.map((item, i) => (
-          <PropertyCard data={item} key={item.propId} reversed={i === 1} />
+      <div className="grid gap-10">
+        {data.data.map((villa, idx) => (
+          <VillaCard key={villa.roomId} data={villa} reversed={idx % 2 !== 0} />
         ))}
       </div>
     );
   }
 
   return (
-    <div className="max-w-250 mx-auto my-20 px-4">
-      {/* <AvailabilityChecker
-        onCheck={onAvailabilityCheck}
-        defaultCheckIn={defaultCheckIn}
-        defaultCheckOut={defaultCheckOut}
-        defaultAdults={defaultAdults}
-        defaultChildren={defaultChildren}
-        variant="solid"
-      /> */}
+    <div className="max-w-250 min-h-[50vh] mx-auto py-10 md:py-16 px-4">
+      <div className="mb-10">
+        <AvailabilityChecker
+          onCheck={onAvailabilityCheck}
+          defaultCheckIn={defaultCheckIn}
+          defaultCheckOut={defaultCheckOut}
+          defaultAdults={defaultAdults}
+          defaultChildren={defaultChildren}
+          variant="solid"
+          available={data && data?.data?.length > 0 ? true : false}
+          loading={isLoading}
+        />
+      </div>
 
       {content}
     </div>

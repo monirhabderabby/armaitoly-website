@@ -35,7 +35,7 @@ export default function Hero({
     router.push(`/availability?${params.toString()}`);
   };
   return (
-    <section className="relative w-full h-screen min-h-150 flex flex-col items-center justify-center overflow-hidden">
+    <section className="relative w-full h-screen min-h-150 flex flex-col items-center justify-center ">
       {/* Background Image */}
       <Image
         src={imageSrc}
@@ -68,7 +68,10 @@ export default function Hero({
 
         {/* Availability Checker */}
         {isAvailabilityEnabled && (
-          <AvailabilityCheckerHero onCheck={onCheckAvailability} />
+          <AvailabilityCheckerHero
+            onCheck={onCheckAvailability}
+            available={false}
+          />
         )}
       </div>
 

@@ -120,7 +120,7 @@ const AllVillasContainer = ({ propId }: Props) => {
 
 export default AllVillasContainer;
 
-const ErrorState = ({ message }: { message: string }) => {
+export const ErrorState = ({ message }: { message: string }) => {
   return (
     <div className="flex flex-col items-center justify-center py-24 text-center">
       <h3 className="text-xl font-semibold text-red-500">

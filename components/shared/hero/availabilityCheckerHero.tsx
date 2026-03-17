@@ -349,7 +349,6 @@ function DateField({ label, value, onChange, minDate, theme }: DateFieldProps) {
         flex: 1,
         minWidth: 0,
         zIndex: open ? 9999 : 1, // ← bump to 9999
-        isolation: "isolate", // ← creates new stacking context
       }}
       suppressHydrationWarning
     >
@@ -541,6 +540,8 @@ function SummaryBadge({ nights, totalGuests }: SummaryBadgeProps) {
         color: "#24a9e1",
         fontSize: "12px",
         fontWeight: 500,
+        position: "relative", // ← add
+        zIndex: 0,
       }}
     >
       {nights} night{nights !== 1 ? "s" : ""} · {totalGuests} guest
@@ -567,6 +568,7 @@ function AvailabilityResult({ available }: AvailabilityResultProps) {
         display: "flex",
         alignItems: "center",
         gap: "6px",
+        zIndex: 0,
       }}
     >
       {available ? (
@@ -690,6 +692,7 @@ interface AvailabilityCheckerProps {
   defaultCheckOut?: Date | null;
   defaultAdults?: number;
   defaultChildren?: number;
+  available: boolean;
 }
 
 // ─── Main Component ───────────────────────────────────────────────────────────
@@ -702,6 +705,7 @@ export default function AvailabilityChecker({
   defaultCheckOut = null,
   defaultAdults = 2,
   defaultChildren = 0,
+  available,
 }: AvailabilityCheckerProps) {
   const [checkIn, setCheckIn] = useState<Date | null>(defaultCheckIn);
   const [checkOut, setCheckOut] = useState<Date | null>(defaultCheckOut);
@@ -808,6 +812,8 @@ export default function AvailabilityChecker({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        position: "relative",
+        zIndex: 1,
       }}
     >
       {/* Ambient glows — only for glass variant */}
@@ -862,7 +868,9 @@ export default function AvailabilityChecker({
           {nights !== null && nights > 0 && (
             <SummaryBadge nights={nights} totalGuests={totalGuests} />
           )}
-          {checked && <AvailabilityResult available={true} />}
+          {!isLoading && checked && (
+            <AvailabilityResult available={available} />
+          )}
         </div>
       )}
 
@@ -1102,6 +1110,8 @@ function DesktopLayout({
         alignItems: "center",
         gap: "16px",
         flexWrap: "nowrap",
+        position: "relative",
+        zIndex: 1,
       })}
     >
       <DateField

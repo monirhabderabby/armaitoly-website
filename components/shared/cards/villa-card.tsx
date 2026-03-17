@@ -121,11 +121,11 @@ export default function VillaCard({
   return (
     <article
       className={`
-        group grid grid-cols-1 md:grid-cols-2 min-h-85
-        rounded-sm overflow-hidden border-gray-400/50 border
-        bg-white transition-shadow duration-300 
-        ${reversed ? "md:[direction:rtl]" : ""}
-      `}
+    group grid grid-cols-1 md:grid-cols-2 min-h-85
+    rounded-sm overflow-hidden border-gray-400/50 border
+    bg-white transition-shadow duration-300 
+    ${reversed ? "md:[direction:rtl]" : ""}
+  `}
     >
       {/* ── image ── */}
       <div className="relative overflow-hidden min-h-65 md:min-h-0 [direction:ltr]">

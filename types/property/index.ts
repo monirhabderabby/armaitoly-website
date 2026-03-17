@@ -93,3 +93,10 @@ export interface VillasByProperIdResponse {
   data: PropertyWithRooms;
   meta: Pagination;
 }
+
+export interface VillaByFilterResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: Villa[];
+}
