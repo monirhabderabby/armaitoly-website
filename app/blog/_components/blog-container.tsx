@@ -9,6 +9,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useGetAllBlogs } from "@/hooks/blogs/use-get-all-blogs";
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 import BlogCard from "./blog-card";
 
@@ -16,10 +17,14 @@ const LIMIT = 3;
 
 const BlogContainer = () => {
   const [page, setPage] = useState(1);
+  const [location, setLocation] = useState<"Thailand" | "Koh Phangan" | "all">(
+    "all",
+  );
 
   const { data, isLoading, isError, error } = useGetAllBlogs({
     page,
     limit: LIMIT,
+    location,
   });
 
   const blogs = data?.data || [];
@@ -39,6 +44,43 @@ const BlogContainer = () => {
 
       {!isLoading && !isError && blogs.length > 0 && (
         <>
+          <div className="flex items-center gap-x-5 mb-10">
+            <button
+              onClick={() => setLocation("all")}
+              className={cn(
+                "text-sm cursor-pointer transition-colors pb-1",
+                location === "all"
+                  ? "text-black border-b-2 border-black font-medium"
+                  : "text-gray-500 hover:text-black",
+              )}
+            >
+              All Post
+            </button>
+
+            <button
+              onClick={() => setLocation("Thailand")}
+              className={cn(
+                "text-sm cursor-pointer transition-colors pb-1",
+                location === "Thailand"
+                  ? "text-black border-b-2 border-black font-medium"
+                  : "text-gray-500 hover:text-black",
+              )}
+            >
+              Thailand
+            </button>
+
+            <button
+              onClick={() => setLocation("Koh Phangan")}
+              className={cn(
+                "text-sm cursor-pointer transition-colors pb-1",
+                location === "Koh Phangan"
+                  ? "text-black border-b-2 border-black font-medium"
+                  : "text-gray-500 hover:text-black",
+              )}
+            >
+              Koh Phangan
+            </button>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {blogs.map((blog) => (
               <BlogCard blog={blog} key={blog._id} />
