@@ -43,11 +43,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-interface PrevInfo {
-  user_query: string;
-  ai_response: string;
-}
-
 interface Message {
   id: string;
   role: "user" | "ai";
@@ -190,35 +185,50 @@ export default function ChatBot({
     setInput("");
     setLoading(true);
 
-    const history: PrevInfo[] = [];
+    // ── Build conversation history pairs ────────────────────────────────────
     const msgs = [...messages, userMsg];
+    const historyPairs: { user_query: string; ai_response: string }[] = [];
+
     for (let i = 0; i < msgs.length - 1; i++) {
       if (msgs[i].role === "user" && msgs[i + 1]?.role === "ai") {
-        history.push({
+        historyPairs.push({
           user_query: msgs[i].content,
           ai_response: msgs[i + 1].content,
         });
       }
     }
-    if (history.length === 0) {
-      history.push({ user_query: "", ai_response: "" });
-    }
+
+    // ── Format prev_info: array → single string ──────────────────────────────
+    // Converts each pair to:
+    //   user_query: <message>
+    //   response: "<html response>"
+    // Pairs are joined with \n
+    const prevInfoString: string = historyPairs
+      .map(
+        ({ user_query, ai_response }) =>
+          `user_query: ${user_query}\nresponse: "${ai_response}"`,
+      )
+      .join("\n");
 
     try {
       const res = await fetch(apiEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_query: text, prev_info: history }),
+        body: JSON.stringify({
+          user_query: text,
+          prev_info: prevInfoString, // ← now a string, not an array
+        }),
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
+      // ✅ New — correctly reaches data.data.text
       const aiContent: string =
+        data?.data?.text ??
         data?.response ??
         data?.answer ??
         data?.message ??
-        data?.data ??
         "<p>Sorry, I couldn't understand the response.</p>";
 
       const aiMsg: Message = {
