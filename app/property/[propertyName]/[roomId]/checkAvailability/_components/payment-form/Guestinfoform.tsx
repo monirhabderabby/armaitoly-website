@@ -126,9 +126,14 @@ const LabelInner = ({
 interface GuestInfoFormProps {
   defaultValues?: Partial<GuestData>;
   onNext: (data: GuestData) => void;
+  loading?: boolean; // 👈 add this
 }
 
-export function GuestInfoForm({ defaultValues, onNext }: GuestInfoFormProps) {
+export function GuestInfoForm({
+  defaultValues,
+  onNext,
+  loading,
+}: GuestInfoFormProps) {
   const form = useForm<GuestData>({
     resolver: zodResolver(guestSchema),
     defaultValues: {
@@ -349,6 +354,7 @@ export function GuestInfoForm({ defaultValues, onNext }: GuestInfoFormProps) {
           {/* CTA */}
           <Button
             type="submit"
+            disabled={loading} // 👈 add this
             className="w-full rounded-xl min-h-10 py-3.5 text-text-[12px] font-semibold text-white shadow-sm transition-all cursor-pointer duration-200 hover:opacity-90 hover:shadow-md active:scale-95"
             style={{ backgroundColor: "#24a9e1" }}
           >
