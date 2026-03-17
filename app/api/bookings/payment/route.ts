@@ -33,6 +33,9 @@ export async function POST(req: NextRequest) {
       `${baseUrl}/booking/payment`, // 👈 confirm this endpoint with Beds24 docs
       {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json", // 👈 add this, otherwise body won't parse
+        },
 
         body: JSON.stringify({
           bookId,
