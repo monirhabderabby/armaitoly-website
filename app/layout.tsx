@@ -4,6 +4,7 @@ import Navbar from "@/components/shared/navbar/navbar";
 import { baseUrl } from "@/constants";
 import AppProvider from "@/providers/app-provider";
 import TranslateProvider from "@/providers/translate-provider";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "flag-icons/css/flag-icons.min.css";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
@@ -59,6 +60,8 @@ export default function RootLayout({
         />
 
         <ChatBot apiEndpoint={`${baseUrl}/ai/ask-your-question`} />
+
+        <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS_ID!} />
       </body>
     </html>
   );
