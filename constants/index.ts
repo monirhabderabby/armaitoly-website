@@ -1,4 +1,5 @@
 export const baseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL!;
+export const mainDomain = process.env.NEXT_PUBLIC_MAIN_DOMAIN!;
 
 export const siteInfo = {
   phone: "+66 (0)62 408 0324",

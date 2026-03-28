@@ -1,4 +1,4 @@
-import { baseUrl } from "@/constants";
+import { baseUrl, mainDomain } from "@/constants";
 import { Metadata } from "next";
 import SingleBlogContainer from "./_components/blog-container";
 
@@ -44,6 +44,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ...(blog.coverImage && { images: [{ url: blog.coverImage }] }),
       type: "article",
       publishedTime: blog.createdAt,
+    },
+    alternates: {
+      canonical: `${mainDomain}/blog/${blog.slug}`,
     },
 
     // Twitter / X card
