@@ -90,7 +90,7 @@ export default function BlogCard({ blog }: BlogCardProps) {
 
         {/* CTA Button */}
         <button
-          onClick={() => router.push(`/blog/${blog._id}`)}
+          onClick={() => router.push(`/blog/${blog.slug}`)}
           className="
             mt-0.5
             w-full

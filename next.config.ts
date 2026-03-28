@@ -16,6 +16,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "media.xmlcal.com",
       },
+      {
+        protocol: "https",
+        hostname: "ucarecdn.com",
+      },
     ],
   },
 

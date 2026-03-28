@@ -8,6 +8,7 @@ export interface BlogAuthor {
 
 export interface Blog {
   _id: string;
+  slug: string;
   title: string;
   location: string;
   coverImage?: string;
@@ -40,4 +41,8 @@ export interface SingleBlogResponse {
   success: boolean;
   message: string;
   data: Blog;
+  metaInfo: {
+    title: string;
+    description: string;
+  };
 }

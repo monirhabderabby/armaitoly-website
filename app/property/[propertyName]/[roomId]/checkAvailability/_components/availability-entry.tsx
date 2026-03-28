@@ -1,8 +1,11 @@
-// components/availability/availability-entry.tsx
 "use client";
 
 import * as ResizablePanel from "@/components/ui/resizable-panel";
 import { useCreateBooking } from "@/hooks/booking/use-booking-create";
+import {
+  PaymentIntentData,
+  useCreatePaymentIntent,
+} from "@/hooks/booking/use-create-payment-intent";
 import { useGetSingleProperty } from "@/hooks/property/use-get-single-property";
 import { CreateBookingResponse } from "@/types/booking";
 import { Loader2 } from "lucide-react";
@@ -13,19 +16,11 @@ import AvailabilityContainer from "./availability-container";
 import { GuestData } from "./payment-form/Guestinfoform";
 import PaymentFormContainer from "./payment-form/Paymentformcontainer";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 interface Props {
   propId: string;
   roomId: string;
   startDate: string;
   endDate: string;
-}
-
-// This is what onPayment returns on success
-export interface PaymentIntentResult {
-  clientSecret: string;
-  bookId: string;
-  amount: number;
 }
 
 export default function AvailabilityEntry({
@@ -40,20 +35,20 @@ export default function AvailabilityEntry({
 
   const { isPending: isBookingPending, mutateAsync: createBooking } =
     useCreateBooking();
-
   const { data, isLoading, isError, error } = useGetSingleProperty(roomId);
+  const { mutateAsync: createPaymentIntent, isPending: isIntentPending } =
+    useCreatePaymentIntent();
 
   const handleNext = (data: OnBookingSubmitProps) => {
     setTimeSlotData(data);
     setState("payment");
   };
 
-  // Returns PaymentIntentResult on success, false on failure
   const onPayment = async (data: {
     guest: GuestData;
     card: null;
     voucher: string;
-  }): Promise<PaymentIntentResult | false> => {
+  }): Promise<PaymentIntentData | false> => {
     if (!timeSlotsData) {
       toast.error("Check-in and check-out data missing!");
       return false;
@@ -61,7 +56,7 @@ export default function AvailabilityEntry({
 
     const guest = data.guest;
 
-    // ── Step 1: Create booking in Beds24 ──────────────────────────────────
+    // ── Step 1: Create booking ─────────────────────────────────────────────
     const bookingResult = await new Promise<CreateBookingResponse | false>(
       (resolve) => {
         createBooking(
@@ -100,38 +95,27 @@ export default function AvailabilityEntry({
       },
     );
 
-    // Stop if booking failed
     if (!bookingResult) return false;
 
-    // ── Step 2: Create Stripe PaymentIntent (30% deposit) ─────────────────
+    // ── Step 2: Create payment intent ──────────────────────────────────────
     try {
-      const bookId = String(bookingResult.data.bookId); // 👈 adjust to your actual response shape
-      const depositAmount = Math.round(timeSlotsData.totalAmount * 0.3); // 30% deposit
-      const currency = data.card ? "THB" : "THB"; // 👈 swap with real currency from room data if needed
+      const bookId = String(bookingResult.data.bookId);
+      const depositAmount = Math.round(timeSlotsData.totalAmount * 0.3);
 
-      const intentRes = await fetch("/api/bookings/payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          bookId,
-          amount: depositAmount,
-          currency,
-        }),
+      const intentResult = await createPaymentIntent({
+        bookId,
+        amount: depositAmount,
+        deposit: "Deposit 30%",
+        status: "Payment",
       });
 
-      const intent = await intentRes.json();
-
-      if (!intent.success) {
-        toast.error(intent.message ?? "Failed to initialise payment");
+      if (!intentResult.success) {
+        toast.error(intentResult.message ?? "Failed to initialise payment");
         return false;
       }
 
-      // ── Return clientSecret + bookId + amount to PaymentFormContainer ───
-      return {
-        clientSecret: intent.data.clientSecret, // 👈 used by <Elements>
-        bookId,
-        amount: depositAmount,
-      };
+      // Return full PaymentIntentData — publishableKey is inside
+      return intentResult.data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       toast.error(err.message ?? "Payment initialisation failed");
@@ -139,7 +123,7 @@ export default function AvailabilityEntry({
     }
   };
 
-  const paymentIsOngoing = isBookingPending;
+  const paymentIsOngoing = isBookingPending || isIntentPending;
 
   let content;
 
@@ -173,7 +157,7 @@ export default function AvailabilityEntry({
           <ResizablePanel.Content value="payment">
             {timeSlotsData && (
               <PaymentFormContainer
-                onSubmit={onPayment} // 👈 now returns PaymentIntentResult | false
+                onSubmit={onPayment}
                 villa={{
                   checkIn: timeSlotsData.checkIn,
                   checkOut: timeSlotsData.checkOut,

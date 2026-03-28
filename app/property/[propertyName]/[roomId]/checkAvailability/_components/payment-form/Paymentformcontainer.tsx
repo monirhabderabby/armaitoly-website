@@ -1,18 +1,13 @@
 "use client";
 
+import { PaymentIntentData } from "@/hooks/booking/use-create-payment-intent";
 import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe, Stripe } from "@stripe/stripe-js";
 import moment from "moment";
 import { useState } from "react";
-import { PaymentIntentResult } from "../availability-entry"; // 👈 import the type
 import { BookingSummary, VillaInfo } from "./Bookingsummary";
 import { GuestData, GuestInfoForm } from "./Guestinfoform";
 import { StripePaymentForm } from "./StripePaymentForm";
-
-// Load stripe outside component to avoid re-creating on every render
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
-);
 
 const IconCheck = () => (
   <svg
@@ -29,14 +24,13 @@ const IconCheck = () => (
   </svg>
 );
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 interface PaymentFormContainerProps {
   villa?: VillaInfo;
   onSubmit?: (data: {
     guest: GuestData;
-    card: null; // 👈 card is now handled by Stripe directly
+    card: null;
     voucher: string;
-  }) => Promise<PaymentIntentResult | false>; // 👈 updated return type
+  }) => Promise<PaymentIntentData | false>;
   loading: boolean;
 }
 
@@ -51,7 +45,6 @@ const defaultVilla: VillaInfo = {
   currency: "USD",
 };
 
-// ─── Steps indicator ──────────────────────────────────────────────────────────
 const Steps = ({ current }: { current: number }) => (
   <div className="flex items-center gap-2 mb-8">
     {(
@@ -63,11 +56,7 @@ const Steps = ({ current }: { current: number }) => (
       <div key={s.n} className="flex items-center gap-2">
         <div className="flex items-center gap-2">
           <div
-            className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all ${
-              current >= s.n
-                ? "bg-[#24a9e1] text-white shadow-sm shadow-[#24a9e1]/30"
-                : "border border-gray-200 bg-white text-gray-400"
-            }`}
+            className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all ${current >= s.n ? "bg-[#24a9e1] text-white shadow-sm shadow-[#24a9e1]/30" : "border border-gray-200 bg-white text-gray-400"}`}
           >
             {current > s.n ? <IconCheck /> : s.n}
           </div>
@@ -87,7 +76,6 @@ const Steps = ({ current }: { current: number }) => (
   </div>
 );
 
-// ─── Main Component ───────────────────────────────────────────────────────────
 export default function PaymentFormContainer({
   villa = defaultVilla,
   onSubmit,
@@ -97,36 +85,37 @@ export default function PaymentFormContainer({
   const [guestData, setGuestData] = useState<GuestData | null>(null);
   const [voucher, setVoucher] = useState("");
 
-  // Stripe payment intent data — set after booking is created
-  const [paymentIntent, setPaymentIntent] =
-    useState<PaymentIntentResult | null>(null);
+  // Store full PaymentIntentData from API (includes publishableKey)
+  const [paymentIntent, setPaymentIntent] = useState<PaymentIntentData | null>(
+    null,
+  );
 
-  // ── Step 1 → 2: Guest form submitted ──────────────────────────────────────
+  // Stripe instance loaded dynamically with key from API response
+  const [stripePromise, setStripePromise] =
+    useState<Promise<Stripe | null> | null>(null);
+
+  // ── Step 1 → 2 ────────────────────────────────────────────────────────────
   const handleGuestNext = async (data: GuestData) => {
     setGuestData(data);
 
-    // Call onPayment in availability-entry → creates booking + payment intent
-    const result = await onSubmit?.({
-      guest: data,
-      card: null, // 👈 no card data needed here anymore
-      voucher,
+    const result = await onSubmit?.({ guest: data, card: null, voucher });
+    if (!result) return;
+
+    // Load Stripe with publishableKey returned from the API
+    const stripe = loadStripe(result.publishableKey, {
+      stripeAccount: result.stripeAccount || undefined,
     });
 
-    if (!result) return; // error toasts already shown in availability-entry
-
-    // Store clientSecret + bookId + amount, then show Stripe form
+    setStripePromise(stripe);
     setPaymentIntent(result);
     setStep(2);
   };
 
-  // ── Step 2 → 3: Stripe payment succeeded ──────────────────────────────────
-  const handlePaymentSuccess = () => {
-    setStep(3);
-  };
+  // ── Step 2 → 3 ────────────────────────────────────────────────────────────
+  const handlePaymentSuccess = () => setStep(3);
 
   return (
     <section className="mx-auto">
-      {/* Page header */}
       <div className="mb-2">
         <div className="mb-2">
           <span
@@ -151,19 +140,18 @@ export default function PaymentFormContainer({
       {step < 3 && <Steps current={step} />}
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        {/* ── LEFT: Form ──────────────────────────────────────────────────── */}
         <div className="order-2 lg:order-1 lg:col-span-2">
-          {/* STEP 1 — Guest info + triggers booking creation */}
+          {/* STEP 1 — Guest info */}
           {step === 1 && (
             <GuestInfoForm
               defaultValues={guestData ?? undefined}
-              onNext={handleGuestNext} // 👈 now also calls onSubmit internally
-              loading={loading} // 👈 disable form while booking is being created
+              onNext={handleGuestNext}
+              loading={loading}
             />
           )}
 
           {/* STEP 2 — Stripe payment form */}
-          {step === 2 && paymentIntent && (
+          {step === 2 && paymentIntent && stripePromise && (
             <Elements
               stripe={stripePromise}
               options={{
@@ -177,15 +165,15 @@ export default function PaymentFormContainer({
               <StripePaymentForm
                 bookId={paymentIntent.bookId}
                 amount={paymentIntent.amount}
-                currency={villa.currency ?? "THB"}
+                currency={paymentIntent.currency}
                 loading={loading}
                 onBack={() => setStep(1)}
-                onSuccess={handlePaymentSuccess} // 👈 setStep(3)
+                onSuccess={handlePaymentSuccess}
               />
             </Elements>
           )}
 
-          {/* STEP 3 — Success screen */}
+          {/* STEP 3 — Success */}
           {step === 3 && guestData && (
             <div className="rounded-2xl border border-gray-100 bg-white shadow-xl shadow-gray-100/80 overflow-hidden text-center">
               <div className="px-6 py-10">
@@ -256,7 +244,6 @@ export default function PaymentFormContainer({
           )}
         </div>
 
-        {/* ── RIGHT: Booking summary ───────────────────────────────────────── */}
         <div className="order-1 lg:order-2 lg:col-span-1">
           <BookingSummary
             villa={villa}

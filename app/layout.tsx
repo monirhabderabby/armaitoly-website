@@ -59,7 +59,10 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
 
-        <ChatBot apiEndpoint={`${baseUrl}/ai/ask-your-question`} />
+        <ChatBot
+          apiEndpoint={`${baseUrl}/ai/ask-your-question`}
+          botName="Joy Beach AI Assistant"
+        />
 
         <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS_ID!} />
       </body>
