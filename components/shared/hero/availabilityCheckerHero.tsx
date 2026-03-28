@@ -1,4 +1,5 @@
 "use client";
+import { useGetFacilities } from "@/hooks/property/use-get-facilities";
 import { useEffect, useRef, useState } from "react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -421,6 +422,429 @@ function DateField({ label, value, onChange, minDate, theme }: DateFieldProps) {
   );
 }
 
+// ─── Add to types at top of file ──────────────────────────────────────────────
+
+interface FacilitiesFieldProps {
+  selected: string[];
+  onChange: (selected: string[]) => void;
+  theme: Theme;
+  facilities: { code: string; label: string }[];
+  loading?: boolean;
+}
+
+// ─── FacilitiesField component ────────────────────────────────────────────────
+
+function FacilitiesField({
+  selected,
+  onChange,
+  theme,
+  facilities,
+  loading,
+}: FacilitiesFieldProps) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const ref = useRef<HTMLDivElement>(null);
+  const [dropDir, setDropDir] = useState<"above" | "below">("below");
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+        setSearch("");
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const handleOpen = () => {
+    if (!open && ref.current) {
+      const rect = ref.current.getBoundingClientRect();
+      const dropdownHeight = 280;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      setDropDir(
+        spaceBelow >= dropdownHeight
+          ? "below"
+          : spaceAbove >= dropdownHeight
+            ? "above"
+            : spaceBelow >= spaceAbove
+              ? "below"
+              : "above",
+      );
+    }
+    setOpen((o) => !o);
+  };
+
+  const toggle = (code: string) => {
+    onChange(
+      selected.includes(code)
+        ? selected.filter((s) => s !== code)
+        : [...selected, code],
+    );
+  };
+
+  const filtered = facilities.filter((f) =>
+    f.label.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const isGlass = theme.card.background.includes("rgba(255,255,255,0.03)");
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        position: "relative",
+        flex: 1,
+        minWidth: 0,
+        zIndex: open ? 9999 : 1,
+      }}
+      suppressHydrationWarning
+    >
+      {/* Label */}
+      <div
+        style={{
+          fontSize: "9px",
+          fontWeight: 700,
+          letterSpacing: "1.2px",
+          color: theme.label,
+          textTransform: "uppercase",
+          marginBottom: "4px",
+        }}
+      >
+        Facilities
+      </div>
+
+      {/* Trigger */}
+      <button
+        onClick={handleOpen}
+        style={{
+          width: "100%",
+          background: "none",
+          border: "none",
+          padding: 0,
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          gap: "7px",
+          textAlign: "left",
+        }}
+      >
+        {/* Filter icon */}
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke={open ? "#24a9e1" : theme.icon}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{ transition: "stroke 0.2s", flexShrink: 0 }}
+        >
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+        </svg>
+
+        <span
+          style={{
+            fontSize: "13px",
+            fontWeight: selected.length ? 500 : 400,
+            color: selected.length ? theme.value : theme.dimmed,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            transition: "color 0.2s",
+            flex: 1,
+          }}
+        >
+          {selected.length === 0
+            ? "Any facilities"
+            : selected.length === 1
+              ? (facilities.find((f) => f.code === selected[0])?.label ??
+                selected[0])
+              : `${selected.length} selected`}
+        </span>
+
+        {/* Count badge */}
+        {selected.length > 0 && (
+          <span
+            style={{
+              background: "#24a9e1",
+              color: "#fff",
+              borderRadius: "10px",
+              fontSize: "10px",
+              fontWeight: 700,
+              padding: "1px 6px",
+              flexShrink: 0,
+              lineHeight: "16px",
+            }}
+          >
+            {selected.length}
+          </span>
+        )}
+
+        {/* Chevron */}
+        <svg
+          width="11"
+          height="11"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke={theme.icon}
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{
+            flexShrink: 0,
+            transition: "transform 0.2s",
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
+          }}
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+
+      {/* Dropdown */}
+      {open && (
+        <div
+          style={{
+            position: "absolute",
+            ...(dropDir === "below"
+              ? { top: "calc(100% + 8px)", bottom: "auto" }
+              : { bottom: "calc(100% + 8px)", top: "auto" }),
+            left: 0,
+            right: 0,
+            minWidth: "220px",
+            background: isGlass ? "rgba(10,10,18,0.97)" : "#ffffff",
+            border: isGlass
+              ? "1px solid rgba(255,255,255,0.08)"
+              : "1px solid #e5e7eb",
+            borderRadius: "16px",
+            boxShadow: isGlass
+              ? "0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)"
+              : "0 12px 40px rgba(0,0,0,0.12)",
+            backdropFilter: "blur(20px)",
+            zIndex: 99999,
+            overflow: "hidden",
+          }}
+        >
+          {/* Search input */}
+          <div
+            style={{
+              padding: "10px 12px 6px",
+              borderBottom: isGlass
+                ? "1px solid rgba(255,255,255,0.06)"
+                : "1px solid #f3f4f6",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "7px",
+                background: isGlass ? "rgba(255,255,255,0.05)" : "#f9fafb",
+                border: isGlass
+                  ? "1px solid rgba(255,255,255,0.08)"
+                  : "1px solid #e5e7eb",
+                borderRadius: "8px",
+                padding: "6px 10px",
+              }}
+            >
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke={isGlass ? "rgba(255,255,255,0.3)" : "#9ca3af"}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                autoFocus
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search facilities…"
+                style={{
+                  background: "none",
+                  border: "none",
+                  outline: "none",
+                  flex: 1,
+                  fontSize: "12px",
+                  color: isGlass ? "rgba(255,255,255,0.8)" : "#111827",
+                  fontFamily: "inherit",
+                }}
+              />
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 0,
+                    color: isGlass ? "rgba(255,255,255,0.3)" : "#9ca3af",
+                    lineHeight: 1,
+                    fontSize: "14px",
+                  }}
+                >
+                  ×
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Clear all row */}
+          {selected.length > 0 && (
+            <div
+              style={{
+                padding: "6px 12px",
+                borderBottom: isGlass
+                  ? "1px solid rgba(255,255,255,0.06)"
+                  : "1px solid #f3f4f6",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <button
+                onClick={() => onChange([])}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "11px",
+                  color: "#24a9e1",
+                  fontWeight: 600,
+                  fontFamily: "inherit",
+                  padding: "2px 0",
+                }}
+              >
+                Clear all ({selected.length})
+              </button>
+            </div>
+          )}
+
+          {/* List */}
+          <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+            {loading ? (
+              <div
+                style={{
+                  padding: "20px",
+                  textAlign: "center",
+                  color: isGlass ? "rgba(255,255,255,0.3)" : "#9ca3af",
+                  fontSize: "12px",
+                }}
+              >
+                Loading…
+              </div>
+            ) : filtered.length === 0 ? (
+              <div
+                style={{
+                  padding: "20px",
+                  textAlign: "center",
+                  color: isGlass ? "rgba(255,255,255,0.3)" : "#9ca3af",
+                  fontSize: "12px",
+                }}
+              >
+                No facilities found
+              </div>
+            ) : (
+              filtered.map((facility) => {
+                const isSelected = selected.includes(facility.code);
+                return (
+                  <button
+                    key={facility.code}
+                    onClick={() => toggle(facility.code)}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      padding: "8px 12px",
+                      background: isSelected
+                        ? isGlass
+                          ? "rgba(36,169,225,0.1)"
+                          : "rgba(36,169,225,0.06)"
+                        : "none",
+                      border: "none",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      transition: "background 0.15s",
+                      fontFamily: "inherit",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isSelected)
+                        e.currentTarget.style.background = isGlass
+                          ? "rgba(255,255,255,0.04)"
+                          : "#f9fafb";
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isSelected)
+                        e.currentTarget.style.background = "none";
+                    }}
+                  >
+                    {/* Checkbox */}
+                    <div
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        borderRadius: "4px",
+                        border: isSelected
+                          ? "none"
+                          : isGlass
+                            ? "1px solid rgba(255,255,255,0.2)"
+                            : "1px solid #d1d5db",
+                        background: isSelected ? "#24a9e1" : "none",
+                        flexShrink: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        transition: "all 0.15s",
+                      }}
+                    >
+                      {isSelected && (
+                        <svg
+                          width="10"
+                          height="10"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#fff"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      )}
+                    </div>
+
+                    <span
+                      style={{
+                        fontSize: "12px",
+                        color: isSelected
+                          ? "#24a9e1"
+                          : isGlass
+                            ? "rgba(255,255,255,0.75)"
+                            : "#374151",
+                        fontWeight: isSelected ? 600 : 400,
+                        transition: "color 0.15s",
+                      }}
+                    >
+                      {facility.label}
+                    </span>
+                  </button>
+                );
+              })
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── CounterField ─────────────────────────────────────────────────────────────
 
 function CounterField({
@@ -680,6 +1104,7 @@ export interface AvailabilityCheckData {
   children: number;
   nights: number;
   totalGuests: number;
+  facilities: string[];
 }
 
 // ─── Props ────────────────────────────────────────────────────────────────────
@@ -693,6 +1118,7 @@ interface AvailabilityCheckerProps {
   defaultAdults?: number;
   defaultChildren?: number;
   available: boolean;
+  defaultFacilities?: string[];
 }
 
 // ─── Main Component ───────────────────────────────────────────────────────────
@@ -706,12 +1132,20 @@ export default function AvailabilityChecker({
   defaultAdults = 2,
   defaultChildren = 0,
   available,
+  defaultFacilities,
 }: AvailabilityCheckerProps) {
   const [checkIn, setCheckIn] = useState<Date | null>(defaultCheckIn);
   const [checkOut, setCheckOut] = useState<Date | null>(defaultCheckOut);
   const [adults, setAdults] = useState<number>(defaultAdults);
   const [children, setChildren] = useState<number>(defaultChildren);
   const [checked, setChecked] = useState<boolean>(false);
+
+  const [facilities, setFacilities] = useState<string[]>(
+    defaultFacilities ?? [],
+  );
+  const { data: facilitiesData, isLoading: facilitiesLoading } =
+    useGetFacilities();
+  const facilityOptions = facilitiesData?.data ?? [];
 
   const isLoading = externalLoading ?? false;
   const { isMobile, isTablet, isDesktop } = useBreakpoint();
@@ -769,6 +1203,7 @@ export default function AvailabilityChecker({
         Math.round((checkOut.getTime() - checkIn.getTime()) / 86400000),
       ),
       totalGuests: adults + children,
+      facilities,
     });
   };
 
@@ -805,6 +1240,10 @@ export default function AvailabilityChecker({
     setChildren,
     handleCheck,
     cardBase: (extra) => cardBase(theme, extra),
+    facilities,
+    setFacilities,
+    facilityOptions,
+    facilitiesLoading,
   };
 
   // ─── Render ──────────────────────────────────────────────────────────────────
@@ -918,6 +1357,10 @@ interface LayoutProps {
   setChildren: (n: number) => void;
   handleCheck: () => void;
   cardBase: (extra: React.CSSProperties) => React.CSSProperties;
+  facilities: string[];
+  setFacilities: (v: string[]) => void;
+  facilityOptions: { code: string; label: string }[];
+  facilitiesLoading: boolean;
 }
 
 function MobileLayout({
@@ -935,6 +1378,10 @@ function MobileLayout({
   setChildren,
   handleCheck,
   cardBase,
+  facilities,
+  setFacilities,
+  facilitiesLoading,
+  facilityOptions,
 }: LayoutProps) {
   return (
     <div
@@ -961,6 +1408,13 @@ function MobileLayout({
         minDate={checkOutMin}
       />
       <HDivider theme={theme} />
+      <FacilitiesField
+        selected={facilities}
+        onChange={setFacilities}
+        theme={theme}
+        facilities={facilityOptions}
+        loading={facilitiesLoading}
+      />
       <div
         style={{
           display: "flex",
@@ -1010,6 +1464,10 @@ function TabletLayout({
   setChildren,
   handleCheck,
   cardBase,
+  facilities,
+  setFacilities,
+  facilitiesLoading,
+  facilityOptions,
 }: LayoutProps) {
   return (
     <div
@@ -1051,6 +1509,14 @@ function TabletLayout({
         </div>
       </div>
       <HDivider theme={theme} />
+
+      <FacilitiesField
+        selected={facilities}
+        onChange={setFacilities}
+        theme={theme}
+        facilities={facilityOptions}
+        loading={facilitiesLoading}
+      />
       <div
         style={{
           display: "flex",
@@ -1103,6 +1569,10 @@ function DesktopLayout({
   setChildren,
   handleCheck,
   cardBase,
+  facilities,
+  setFacilities,
+  facilitiesLoading,
+  facilityOptions,
 }: LayoutProps) {
   return (
     <div
@@ -1133,6 +1603,13 @@ function DesktopLayout({
         minDate={checkOutMin}
       />
       <VDivider theme={theme} />
+      <FacilitiesField
+        selected={facilities}
+        onChange={setFacilities}
+        theme={theme}
+        facilities={facilityOptions}
+        loading={facilitiesLoading}
+      />
       <CounterField
         label="Adults"
         value={adults}

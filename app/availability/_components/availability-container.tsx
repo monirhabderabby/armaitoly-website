@@ -54,6 +54,15 @@ const AvailabilityContainer = () => {
     ? Number(searchParams.get("children"))
     : 0;
 
+  const defaultFacilities = searchParams.get("facilities")
+    ? searchParams.get("facilities")!.split(",")
+    : [];
+
+  // Pass facilities to useGetVillaByFilter
+  const facilitiesParam = searchParams.get("facilities")
+    ? searchParams.get("facilities")!.split(",")
+    : [];
+
   const onAvailabilityCheck = (data: AvailabilityCheckData) => {
     const params = new URLSearchParams({
       checkIn: data.checkIn.toISOString(),
@@ -63,7 +72,9 @@ const AvailabilityContainer = () => {
       nights: data.nights.toString(),
       totalGuests: data.totalGuests.toString(),
     });
-
+    if (data.facilities.length > 0) {
+      params.set("facilities", data.facilities.join(","));
+    }
     router.replace(`/availability?${params.toString()}`);
   };
 
@@ -76,6 +87,7 @@ const AvailabilityContainer = () => {
     checkOut,
     numAdult: defaultAdults,
     numChild: defaultChildren,
+    facilities: facilitiesParam,
   });
 
   let content;
@@ -149,6 +161,7 @@ const AvailabilityContainer = () => {
           variant="solid"
           available={data && data?.data?.length > 0 ? true : false}
           loading={isLoading}
+          defaultFacilities={defaultFacilities}
         />
       </div>
 
