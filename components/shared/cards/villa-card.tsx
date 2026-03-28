@@ -128,17 +128,19 @@ export default function VillaCard({
   `}
     >
       {/* ── image ── */}
-      <div className="relative overflow-hidden min-h-65 md:min-h-0 [direction:ltr]">
-        <Image
-          src={villa.images[0]}
-          alt={villa.name}
-          fill
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, 50vw"
-        />
-        {/* subtle overlay */}
-        <div className="absolute inset-0 bg-linear-to-br from-black/10 to-transparent pointer-events-none" />
-      </div>
+      {villa.images.length > 0 && (
+        <div className="relative overflow-hidden min-h-65 md:min-h-0 [direction:ltr]">
+          <Image
+            src={villa.images[0].url}
+            alt={villa.images[0].alt ?? villa.name}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+          {/* subtle overlay */}
+          <div className="absolute inset-0 bg-linear-to-br from-black/10 to-transparent pointer-events-none" />
+        </div>
+      )}
 
       {/* ── content ── */}
       <div className="flex flex-col justify-center gap-2.5 px-4 py-10 md:px-11 [direction:ltr]">

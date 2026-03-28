@@ -263,8 +263,8 @@ export default function SinglePropertyContainer({
       >
         {images.length > 0 && (
           <Image
-            src={images[activeImage]}
-            alt={villa.name}
+            src={images[activeImage].url}
+            alt={images[activeImage].alt ?? villa.name}
             fill
             className="object-cover transition-all duration-500"
             priority
@@ -302,7 +302,7 @@ export default function SinglePropertyContainer({
       {/* ── Thumbnails ────────────────────────────────────────────────────── */}
       {images.length > 1 && (
         <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
-          {images.map((src, i) => (
+          {images.map((item, i) => (
             <button
               key={i}
               onClick={() => setActiveImage(i)}
@@ -313,8 +313,8 @@ export default function SinglePropertyContainer({
               }`}
             >
               <Image
-                src={src}
-                alt={`Villa image ${i + 1}`}
+                src={item.url}
+                alt={item.alt ?? villa.name}
                 fill
                 className="object-cover"
                 unoptimized

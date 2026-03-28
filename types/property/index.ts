@@ -44,7 +44,10 @@ export interface Villa {
   cleaningFee: number;
   securityDeposit: number;
   taxPercent: number;
-  images: string[];
+  images: {
+    url: string;
+    alt: string;
+  }[];
 }
 
 export interface HomePagePropertyResponse {
