@@ -22,9 +22,14 @@ export async function GET() {
   const urls = blogs
     .filter((blog: { isPublished: boolean }) => blog.isPublished)
     .map(
-      (blog: { _id: string; updatedAt?: string; createdAt: string }) => `
+      (blog: {
+        _id: string;
+        updatedAt?: string;
+        createdAt: string;
+        slug: string;
+      }) => `
   <url>
-    <loc>${SITE_URL}/blog/${blog._id}</loc>
+    <loc>${SITE_URL}/blog/${blog.slug}</loc>
     <lastmod>${new Date(blog.updatedAt ?? blog.createdAt).toISOString()}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
