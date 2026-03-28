@@ -19,6 +19,10 @@ export interface Blog {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  metaInfo: {
+    title: string;
+    description: string;
+  };
 }
 
 export interface BlogMeta {
@@ -41,8 +45,4 @@ export interface SingleBlogResponse {
   success: boolean;
   message: string;
   data: Blog;
-  metaInfo: {
-    title: string;
-    description: string;
-  };
 }
