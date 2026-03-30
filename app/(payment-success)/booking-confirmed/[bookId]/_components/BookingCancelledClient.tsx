@@ -288,14 +288,6 @@ export default function BookingCancelledClient({ bookId }: { bookId: string }) {
             <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-gray-400 mb-3">
               What would you like to do?
             </p>
-            <button
-              onClick={() => window.history.back()}
-              className="flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-[12px] font-bold text-white shadow-md transition-all hover:opacity-90 hover:shadow-lg active:scale-95"
-              style={{ backgroundColor: "#24a9e1" }}
-            >
-              <IconRefresh />
-              Try Booking Again
-            </button>
             <Link
               href="/"
               className="flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-[12px] font-semibold text-gray-600 shadow-sm transition hover:border-gray-300 hover:shadow active:scale-95"
