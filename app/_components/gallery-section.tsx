@@ -134,7 +134,7 @@ export default function GallerySection() {
         <h2 className="text-xl md:text-3xl font-bold text-[#1a3c4d] mb-3 tracking-tight">
           Life at Joy Koh Phangan
         </h2>
-        <p className="text-gray-500 max-w-xl mx-auto text-[14px]  md:text-base leading-relaxed">
+        <p className="text-gray-500 max-w-xl mx-auto  md:text-base leading-relaxed">
           Step inside our world — from sun-drenched villas to serene
           beachfronts, every corner is crafted for your perfect escape.
         </p>
@@ -202,19 +202,19 @@ export default function GallerySection() {
 
           {/* Modal card */}
           <div
-            className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center"
+            className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center overflow-y-auto"
             style={{ animation: "scaleIn 0.25s ease" }}
           >
             {/* Close button */}
             <button
               onClick={closeModal}
-              className="absolute -top-12 right-0 flex items-center gap-1.5 text-white/70 hover:text-white transition-colors text-sm font-medium group"
+              className="absolute -top-36 md:-top-24 right-0 flex items-center gap-1.5 text-white/70 hover:text-white transition-colors text-sm font-medium group"
               aria-label="Close gallery"
             >
               <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xs tracking-wide">
                 Close
               </span>
-              <div className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-colors">
+              <div className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-colors">
                 <X size={18} />
               </div>
             </button>
@@ -230,7 +230,7 @@ export default function GallerySection() {
               <div
                 key={activeIndex}
                 className="relative w-full"
-                style={{ height: "80vh", animation: "imgFadeIn 0.3s ease" }}
+                style={{ height: "65vh", animation: "imgFadeIn 0.3s ease" }}
               >
                 <Image
                   src={GALLERY_IMAGES[activeIndex].src}
@@ -273,13 +273,13 @@ export default function GallerySection() {
             </p>
 
             {/* Thumbnail strip */}
-            <div className="mt-4 flex gap-2 overflow-x-auto max-w-full pb-1 px-1 scrollbar-none">
+            <div className="mt-4 flex flex-wrap gap-2 overflow-x-auto max-w-full pb-1 px-1 scrollbar-none">
               {GALLERY_IMAGES.map((img, i) => (
                 <button
                   key={i}
                   onClick={() => setActiveIndex(i)}
                   className={[
-                    "shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-all duration-200",
+                    "shrink-0 w-10 h-10 rounded-lg overflow-hidden border-2 transition-all duration-200",
                     i === activeIndex
                       ? "border-[#38b2ac] opacity-100 scale-105"
                       : "border-transparent opacity-50 hover:opacity-80",
@@ -292,7 +292,7 @@ export default function GallerySection() {
                       alt={img.alt}
                       fill
                       className="object-cover"
-                      sizes="56px"
+                      sizes="46px"
                     />
                   </div>
                 </button>
