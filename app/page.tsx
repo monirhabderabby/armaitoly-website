@@ -7,6 +7,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import GallerySection from "./_components/gallery-section";
 import GivingBackEnvironment from "./_components/giving-back-environment";
 import GuestReviews from "./_components/guest-reviews";
 import HomePageVillaContainer from "./_components/home-page-villa-container";
@@ -43,6 +44,8 @@ export default async function Home() {
         description="Your perfect home away from home"
         imageSrc="/hero/hero.png"
       />
+
+      <GallerySection />
 
       <HydrationBoundary state={dehydrate(queryClient)}>
         <HomePageVillaContainer />
