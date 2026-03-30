@@ -1,13 +1,10 @@
 "use client";
 
 import { PaymentIntentData } from "@/hooks/booking/use-create-payment-intent";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe, Stripe } from "@stripe/stripe-js";
 import moment from "moment";
 import { useState } from "react";
 import { BookingSummary, VillaInfo } from "./Bookingsummary";
 import { GuestData, GuestInfoForm } from "./Guestinfoform";
-import { StripePaymentForm } from "./StripePaymentForm";
 
 const IconCheck = () => (
   <svg
@@ -81,18 +78,12 @@ export default function PaymentFormContainer({
   onSubmit,
   loading,
 }: PaymentFormContainerProps) {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step] = useState<1 | 2 | 3>(1);
   const [guestData, setGuestData] = useState<GuestData | null>(null);
   const [voucher, setVoucher] = useState("");
 
   // Store full PaymentIntentData from API (includes publishableKey)
-  const [paymentIntent, setPaymentIntent] = useState<PaymentIntentData | null>(
-    null,
-  );
-
-  // Stripe instance loaded dynamically with key from API response
-  const [stripePromise, setStripePromise] =
-    useState<Promise<Stripe | null> | null>(null);
+  const [paymentIntent] = useState<PaymentIntentData | null>(null);
 
   // ── Step 1 → 2 ────────────────────────────────────────────────────────────
   const handleGuestNext = async (data: GuestData) => {
@@ -101,18 +92,9 @@ export default function PaymentFormContainer({
     const result = await onSubmit?.({ guest: data, card: null, voucher });
     if (!result) return;
 
-    // Load Stripe with publishableKey returned from the API
-    const stripe = loadStripe(result.publishableKey, {
-      stripeAccount: result.stripeAccount || undefined,
-    });
-
-    setStripePromise(stripe);
-    setPaymentIntent(result);
-    setStep(2);
+    // Simply redirect to Stripe Checkout — no Stripe.js needed
+    window.location.href = result.checkoutUrl;
   };
-
-  // ── Step 2 → 3 ────────────────────────────────────────────────────────────
-  const handlePaymentSuccess = () => setStep(3);
 
   return (
     <section className="mx-auto">
@@ -151,27 +133,6 @@ export default function PaymentFormContainer({
           )}
 
           {/* STEP 2 — Stripe payment form */}
-          {step === 2 && paymentIntent && stripePromise && (
-            <Elements
-              stripe={stripePromise}
-              options={{
-                clientSecret: paymentIntent.clientSecret,
-                appearance: {
-                  theme: "stripe",
-                  variables: { colorPrimary: "#24a9e1" },
-                },
-              }}
-            >
-              <StripePaymentForm
-                bookId={paymentIntent.bookId}
-                amount={paymentIntent.amount}
-                currency={paymentIntent.currency}
-                loading={loading}
-                onBack={() => setStep(1)}
-                onSuccess={handlePaymentSuccess}
-              />
-            </Elements>
-          )}
 
           {/* STEP 3 — Success */}
           {step === 3 && guestData && (

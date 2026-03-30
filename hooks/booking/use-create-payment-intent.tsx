@@ -13,9 +13,11 @@ export interface PaymentIntentData {
   amount: number;
   currency: string;
   sessionId: string;
-  clientSecret: string;
-  publishableKey: string;
+  checkoutUrl: string;
+  paymentIntent: string;
   stripeAccount: string;
+  status: string;
+  amountTotal: number;
 }
 
 export interface CreatePaymentIntentResponse {
