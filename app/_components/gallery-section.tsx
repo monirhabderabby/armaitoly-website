@@ -194,6 +194,19 @@ export default function GallerySection() {
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           style={{ animation: "fadeIn 0.2s ease" }}
         >
+          {/* Close button */}
+          <button
+            onClick={closeModal}
+            className="fixed top-4 right-4 z-60 flex items-center gap-1.5 text-white/70 hover:text-white transition-colors text-sm font-medium group"
+            aria-label="Close gallery"
+          >
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xs tracking-wide">
+              Close
+            </span>
+            <div className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-colors">
+              <X size={18} />
+            </div>
+          </button>
           {/* Blurred backdrop */}
           <div
             className="absolute inset-0 bg-black/75 backdrop-blur-md"
@@ -205,20 +218,6 @@ export default function GallerySection() {
             className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center overflow-y-auto"
             style={{ animation: "scaleIn 0.25s ease" }}
           >
-            {/* Close button */}
-            <button
-              onClick={closeModal}
-              className="absolute -top-36 md:-top-24 right-0 flex items-center gap-1.5 text-white/70 hover:text-white transition-colors text-sm font-medium group"
-              aria-label="Close gallery"
-            >
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xs tracking-wide">
-                Close
-              </span>
-              <div className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-colors">
-                <X size={18} />
-              </div>
-            </button>
-
             {/* Counter */}
             <div className="absolute -top-12 left-0 text-white/60 text-sm font-medium tabular-nums">
               {activeIndex + 1} <span className="text-white/30">/</span>{" "}
