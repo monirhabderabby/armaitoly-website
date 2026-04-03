@@ -292,7 +292,11 @@ export default function GallerySection() {
 
             {/* View villa link */}
             <button
-              onClick={() => router.push("/")}
+              onClick={() =>
+                router.push(
+                  `/property/${activeVilla.name}/${activeVilla.roomId}`,
+                )
+              }
               className="mt-3 text-[#38b2ac] text-xs tracking-widest uppercase hover:underline"
             >
               View Villa →
