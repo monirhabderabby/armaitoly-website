@@ -11,9 +11,12 @@ async function getAllBlogs(): Promise<Blog[]> {
     let totalPages = 1;
 
     while (page <= totalPages) {
-      const res = await fetch(`${baseUrl}/blog?page=${page}&limit=100`, {
-        next: { revalidate: 3600 },
-      });
+      const res = await fetch(
+        `${baseUrl}/blog?page=${page}&limit=100?location=all`,
+        {
+          next: { revalidate: 3600 },
+        },
+      );
       if (!res.ok) break;
 
       const json = await res.json();
