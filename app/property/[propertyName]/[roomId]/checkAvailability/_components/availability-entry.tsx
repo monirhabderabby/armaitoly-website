@@ -138,7 +138,7 @@ export default function AvailabilityEntry({
   } else if (data && data.data) {
     const roomName = data.data.name;
     const currency = data.data.price.currency;
-    const image = data.data.images[0].url;
+    const image = data.data.images?.length > 0 ? data.data.images[0].url : "";
     const location = data.data.location;
 
     content = (
