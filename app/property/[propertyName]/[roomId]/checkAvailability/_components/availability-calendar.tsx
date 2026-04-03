@@ -19,6 +19,8 @@ interface Props {
   minimumStay: VillaMinimumStay[];
   villa: Villa;
   onSelect: (data: OnBookingSubmitProps) => void;
+  defaultCheckIn?: string | null; // ← add
+  defaultCheckOut?: string | null;
 }
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -76,6 +78,8 @@ export default function AvailabilityCalendar({
   minimumStay,
   villa,
   onSelect,
+  defaultCheckIn,
+  defaultCheckOut,
 }: Props) {
   const dateMap = useMemo(() => {
     const map: Record<string, AvailabilityDate> = {};
@@ -85,14 +89,19 @@ export default function AvailabilityCalendar({
     return map;
   }, [dates]);
 
-  const firstDate = dates[0]?.date
-    ? new Date(dates[0].date + "T00:00:00")
-    : new Date();
+  // With this:
+  const initialDate = defaultCheckIn
+    ? new Date(defaultCheckIn + "T00:00:00")
+    : dates[0]?.date
+      ? new Date(dates[0].date + "T00:00:00")
+      : new Date();
 
-  const [viewYear, setViewYear] = useState(firstDate.getFullYear());
-  const [viewMonth, setViewMonth] = useState(firstDate.getMonth());
-  const [checkIn, setCheckIn] = useState<string | null>(null);
-  const [checkOut, setCheckOut] = useState<string | null>(null);
+  const [viewYear, setViewYear] = useState(initialDate.getFullYear());
+  const [viewMonth, setViewMonth] = useState(initialDate.getMonth());
+  const [checkIn, setCheckIn] = useState<string | null>(defaultCheckIn ?? null);
+  const [checkOut, setCheckOut] = useState<string | null>(
+    defaultCheckOut ?? null,
+  );
   const [hovered, setHovered] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [guests, setGuests] = useState(1);

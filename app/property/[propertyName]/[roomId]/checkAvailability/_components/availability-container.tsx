@@ -353,7 +353,14 @@ export default function AvailabilityContainer({
         minimumStay={minimumStay} // minimumStay
         onSelect={onNext}
         villa={room!}
+        defaultCheckIn={parseDateParam(startDate)} // ← add
+        defaultCheckOut={parseDateParam(endDate)}
       />
     </>
   );
+}
+
+function parseDateParam(raw: string | null): string | null {
+  if (!raw || raw.length !== 8) return null;
+  return `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)}`;
 }
