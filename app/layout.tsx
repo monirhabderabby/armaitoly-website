@@ -21,8 +21,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "JOY Beach Villas",
-  description: "Celebrate The Good Life on Koh Phangan",
+  title: "Luxury Beach Villas in Koh Phangan | Joy Beach Villas",
+  description:
+    "experience the ultimate getaway at joy beach villas with luxury villas in koh phangan, offering stunning beach views and exquisite amenities for an unforgettable stay.",
 };
 
 export default function RootLayout({
