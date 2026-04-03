@@ -10,8 +10,8 @@ interface ItemType {
 
 const items = [
   { id: 1, name: "Privacy Policy", href: "/privacy-policy" },
-  { id: 2, name: "Imprint", href: "" },
-  { id: 3, name: "Terms & Conditions", href: "" },
+  { id: 2, name: "Imprint", href: "/imprint" },
+  { id: 3, name: "Terms & Conditions", href: "/terms-conditions" },
 ] as ItemType[];
 
 const headingClass =
