@@ -1,10 +1,19 @@
+import DynamicTitle from "@/components/shared/dynamic-title";
 import FeatureSection from "@/components/shared/features-section";
 import Hero from "@/components/shared/hero/hero";
+import { Metadata } from "next";
 import WhereToGo from "./_components/where-to-go";
+
+export const metadata: Metadata = {
+  title: "About Us | Joy Beach Villas",
+  description:
+    "enjoy breathtaking sunsets and tranquil beach walks at our eco-friendly beachfront destination in koh phangan. perfect for unforgettable memories.",
+};
 
 const Page = () => {
   return (
     <div>
+      <DynamicTitle pageKey="about" />
       <Hero
         title="About JOY VILLAS"
         description="the perfect home away from home"
