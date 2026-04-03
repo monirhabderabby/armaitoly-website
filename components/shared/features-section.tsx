@@ -13,6 +13,7 @@ interface Props {
   cta?: string;
   ctaHref?: string;
   accent?: string;
+  id?: string;
 }
 
 export default function FeatureSection({
@@ -26,9 +27,10 @@ export default function FeatureSection({
   cta,
   ctaHref = "#",
   accent,
+  id,
 }: Props) {
   return (
-    <section className="w-full py-16 sm:py-20 lg:py-24 bg-white">
+    <section id={id} className="w-full py-16 sm:py-20 lg:py-24 bg-white">
       <div className="max-w-325 mx-auto px-5 sm:px-8 lg:px-12">
         <div
           className={`grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center ${

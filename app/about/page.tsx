@@ -58,6 +58,7 @@ const Page = () => {
       <WhereToGo />
 
       <FeatureSection
+        id="how-to-get-here"
         title="How to get here"
         em="From Bangkok and the world"
         imgSrc="/ferry.avif"

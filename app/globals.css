@@ -168,3 +168,7 @@ body {
 .skiptranslate {
   display: none !important;
 }
+
+html {
+  scroll-behavior: smooth;
+}
