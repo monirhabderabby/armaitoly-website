@@ -26,7 +26,8 @@ interface CalendarProps {
   onChange: (date: Date) => void;
   onClose: () => void;
   minDate?: Date | null;
-  dropDir: "above" | "below"; // ← add
+  dropDir: "above" | "below";
+  initialViewDate?: Date | null;
 }
 
 interface DateFieldProps {
@@ -35,6 +36,7 @@ interface DateFieldProps {
   onChange: (date: Date) => void;
   minDate?: Date | null;
   theme: Theme;
+  initialViewDate?: Date | null;
 }
 
 interface CounterFieldProps {
@@ -106,9 +108,12 @@ function Calendar({
   onClose,
   minDate,
   dropDir,
+  initialViewDate,
 }: CalendarProps) {
   const today = new Date();
-  const [viewDate, setViewDate] = useState<Date>(value ?? today);
+  const [viewDate, setViewDate] = useState<Date>(
+    value ?? initialViewDate ?? today, // ← CHANGE THIS
+  );
   const { isMobile } = useBreakpoint();
 
   const year: number = viewDate.getFullYear();
@@ -299,7 +304,14 @@ function Calendar({
 
 // ─── DateField ────────────────────────────────────────────────────────────────
 
-function DateField({ label, value, onChange, minDate, theme }: DateFieldProps) {
+function DateField({
+  label,
+  value,
+  onChange,
+  minDate,
+  theme,
+  initialViewDate,
+}: DateFieldProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [dropDir, setDropDir] = useState<"above" | "below">("below");
   const ref = useRef<HTMLDivElement>(null);
@@ -416,6 +428,7 @@ function DateField({ label, value, onChange, minDate, theme }: DateFieldProps) {
           onClose={() => setOpen(false)}
           minDate={minDate}
           dropDir={dropDir}
+          initialViewDate={initialViewDate}
         />
       )}
     </div>
@@ -1406,6 +1419,7 @@ function MobileLayout({
         onChange={setCheckOut}
         theme={theme}
         minDate={checkOutMin}
+        initialViewDate={checkIn} // ← ADD THIS to all 3 layouts
       />
       <HDivider theme={theme} />
       <FacilitiesField
@@ -1505,6 +1519,7 @@ function TabletLayout({
             onChange={setCheckOut}
             theme={theme}
             minDate={checkOutMin}
+            initialViewDate={checkIn} // ← ADD THIS to all 3 layouts
           />
         </div>
       </div>
@@ -1601,6 +1616,7 @@ function DesktopLayout({
         onChange={setCheckOut}
         theme={theme}
         minDate={checkOutMin}
+        initialViewDate={checkIn} // ← ADD THIS to all 3 layouts
       />
       <VDivider theme={theme} />
       <FacilitiesField

@@ -25,8 +25,6 @@ const Page = async ({ params, searchParams }: PageProps) => {
     0,
   );
 
-  console.log("check availability page");
-
   return (
     <div className="">
       <div className="py-20 md:py-36 max-w-260 mx-auto px-4 ">

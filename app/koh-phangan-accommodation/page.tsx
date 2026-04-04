@@ -7,6 +7,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { Metadata } from "next";
 import AccommodationContainer from "./_components/accommodation-container";
 
 async function prefetchAccommodationVillas(queryClient: QueryClient) {
@@ -26,6 +27,13 @@ async function prefetchAccommodationVillas(queryClient: QueryClient) {
     },
   });
 }
+
+export const metadata: Metadata = {
+  title:
+    "Phangan Accommodation: Beach Bungalow &amp; House Stays | Joy Beach Villas",
+  description:
+    "find your perfect stay with our accommodations in phangan. offering serene beach bungalows and charming beach houses on the beautiful island of koh phangan.",
+};
 
 export default async function Home() {
   const queryClient = new QueryClient();

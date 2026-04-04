@@ -1,3 +1,4 @@
+import { AdditionalVillas } from "@/components/shared/AdditionalVillas";
 import SinglePropertyContainer from "./_component/single-property-container";
 
 interface PageProps {
@@ -10,6 +11,8 @@ const Page = async ({ params }: PageProps) => {
   return (
     <main className="mt-20">
       <SinglePropertyContainer roomId={roomId} />
+
+      <AdditionalVillas currentRoomId={roomId} />
     </main>
   );
 };

@@ -347,9 +347,9 @@ export default function SinglePropertyContainer({
                 {villa.location}
               </p>
             </div>
-            <button className="flex shrink-0 items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 shadow-sm transition hover:border-gray-300 hover:shadow">
+            {/* <button className="flex shrink-0 items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 shadow-sm transition hover:border-gray-300 hover:shadow">
               <IconShare /> Share
-            </button>
+            </button> */}
           </div>
 
           {/* Quick stats */}

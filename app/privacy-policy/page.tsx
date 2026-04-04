@@ -1,4 +1,5 @@
 import Hero from "@/components/shared/hero/hero";
+import { Metadata } from "next";
 
 const PrivacySection = ({
   title,
@@ -14,6 +15,12 @@ const PrivacySection = ({
     <div className="text-gray-600 leading-relaxed space-y-3">{children}</div>
   </div>
 );
+
+export const metadata: Metadata = {
+  title: "Privacy Policy | Joy Beach Villas",
+  description:
+    "experience the ultimate getaway at joy beach villas with luxury villas in koh phangan, offering stunning beach views and exquisite amenities for an unforgettable stay.",
+};
 
 const Page = () => {
   return (
