@@ -27,12 +27,16 @@ const Page = async ({ params, searchParams }: PageProps) => {
 
   return (
     <div className="">
-      <div className="py-20 md:py-36 max-w-260 mx-auto px-4 ">
+      <div className="py-20 md:py-36 max-w-260 mx-auto px-4">
         <AvailabilityEntry
           propId={propId ?? ""}
           roomId={roomId}
-          startDate={startDate ?? fmt(today)}
-          endDate={endDate ?? fmt(lastDayNextMonth)}
+          // Always pass a fetch range so the API call has bounds
+          fetchStartDate={startDate ?? fmt(today)}
+          fetchEndDate={endDate ?? fmt(lastDayNextMonth)}
+          // Only pass these when the URL actually contains them — calendar stays empty otherwise
+          startDate={startDate}
+          endDate={endDate}
         />
       </div>
     </div>

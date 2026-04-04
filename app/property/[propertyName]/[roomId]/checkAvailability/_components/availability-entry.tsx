@@ -19,13 +19,17 @@ import PaymentFormContainer from "./payment-form/Paymentformcontainer";
 interface Props {
   propId: string;
   roomId: string;
-  startDate: string;
-  endDate: string;
+  fetchStartDate: string; // always has a value — used for the API call
+  fetchEndDate: string; // always has a value — used for the API call
+  startDate?: string; // only set when the URL contained it — pre-selects calendar
+  endDate?: string;
 }
 
 export default function AvailabilityEntry({
   propId,
   roomId,
+  fetchStartDate,
+  fetchEndDate,
   startDate,
   endDate,
 }: Props) {
@@ -148,8 +152,10 @@ export default function AvailabilityEntry({
             <AvailabilityContainer
               propId={propId}
               roomId={roomId}
-              startDate={startDate}
-              endDate={endDate}
+              startDate={fetchStartDate} // ← API fetch range
+              endDate={fetchEndDate}
+              defaultCheckIn={startDate} // ← calendar pre-selection (undefined when absent)
+              defaultCheckOut={endDate}
               onNext={handleNext}
               room={data.data}
             />

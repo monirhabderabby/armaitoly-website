@@ -237,6 +237,8 @@ export interface AvailabilityContainerProps {
   roomId: string;
   startDate: string;
   endDate: string;
+  defaultCheckIn?: string; // ← new
+  defaultCheckOut?: string; // ← new
   onNext: (data: OnBookingSubmitProps) => void;
   room: Villa;
 }
@@ -266,6 +268,8 @@ export default function AvailabilityContainer({
   endDate,
   onNext,
   room,
+  defaultCheckIn, // ← new
+  defaultCheckOut, // ← new
 }: AvailabilityContainerProps) {
   const {
     data: availabilityData,
@@ -349,12 +353,14 @@ export default function AvailabilityContainer({
         </p>
       </div>
       <AvailabilityCalendar
-        dates={availabilityData.data.dates} // availabilityData.data.dates
-        minimumStay={minimumStay} // minimumStay
+        dates={availabilityData.data.dates}
+        minimumStay={minimumStay}
         onSelect={onNext}
         villa={room!}
-        defaultCheckIn={parseDateParam(startDate)} // ← add
-        defaultCheckOut={parseDateParam(endDate)}
+        defaultCheckIn={defaultCheckIn ? parseDateParam(defaultCheckIn) : null}
+        defaultCheckOut={
+          defaultCheckOut ? parseDateParam(defaultCheckOut) : null
+        }
       />
     </>
   );
