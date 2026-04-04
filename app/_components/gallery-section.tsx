@@ -14,9 +14,25 @@ export default function GallerySection() {
   const [activeVillaIndex, setActiveVillaIndex] = useState<number | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
 
-  const gridVillas: Villa[] = (data?.data ?? [])
-    .filter((v) => v.images.length > 0)
-    .slice(0, 5);
+  const gridVillas: Villa[] = (() => {
+    const villas = (data?.data ?? [])
+      .filter((v) => v.images.length > 0)
+      .slice(0, 5);
+    // Swap Beachfront Villa (index 0) with Garden Pool Villa 1 (index 3)
+    const beachfrontIdx = villas.findIndex(
+      (v) => v.name === "Beachfront Villa",
+    );
+    const gardenPoolIdx = villas.findIndex(
+      (v) => v.name === "Garden Pool Villa 1",
+    );
+    if (beachfrontIdx !== -1 && gardenPoolIdx !== -1) {
+      [villas[beachfrontIdx], villas[gardenPoolIdx]] = [
+        villas[gardenPoolIdx],
+        villas[beachfrontIdx],
+      ];
+    }
+    return villas;
+  })();
 
   const activeVilla =
     activeVillaIndex !== null ? gridVillas[activeVillaIndex] : null;
