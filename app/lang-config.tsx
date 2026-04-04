@@ -9,6 +9,8 @@ const config = {
     { title: "Deutsch", name: "de" },
     { title: "Français", name: "fr" },
     { title: "Español", name: "es" },
+    { title: "עברית", name: "iw" },
+    { title: "Русский", name: "ru" },
 
     // { title: "Bangla", name: "bn" },
   ],

@@ -25,6 +25,8 @@ const LANG_META: Record<string, { countryCode: string; code: string }> = {
   de: { countryCode: "de", code: "DE" },
   fr: { countryCode: "fr", code: "FR" },
   es: { countryCode: "es", code: "ES" },
+  iw: { countryCode: "il", code: "HE" }, // Hebrew → Israel flag
+  ru: { countryCode: "ru", code: "RU" },
 };
 
 type Props = {
@@ -151,9 +153,9 @@ const LanguageSwitcherComponent = ({ mobile = false }: Props) => {
                   style={{ width: 20, height: 15, display: "inline-block" }}
                 />
                 <span className="font-medium text-black">{meta.code}</span>
-                <span className="text-black/40 text-xs ml-auto">
+                {/* <span className="text-black/40 text-xs ml-auto">
                   {lang.title}
-                </span>
+                </span> */}
               </button>
             );
           })}
