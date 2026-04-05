@@ -57,7 +57,7 @@ export function useCurrencyFormat() {
     if (converted === null || isNaN(converted)) {
       return `${amount.toLocaleString()} ${from}`;
     }
-    return `${Math.ceil(converted)} ${selectedCurrency}`;
+    return `${converted.toFixed(2)} ${selectedCurrency}`;
   }
 
   return { format, convert, selectedCurrency, isLoading, isError };

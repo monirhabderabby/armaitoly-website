@@ -13,6 +13,7 @@ import {
 } from "@/constants/icons";
 import { useGetSingleProperty } from "@/hooks/property/use-get-single-property";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "nextjs-toploader/app";
 import { useState } from "react";
 import FeesDisplay from "./fees-display";
@@ -50,6 +51,9 @@ export default function SinglePropertyContainer({
   const [activeImage, setActiveImage] = useState(0);
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const selectedCurrency = searchParams.get("currency") ?? "THB";
 
   // ── Loading ────────────────────────────────────────────────────────────────
   if (isLoading) {
@@ -492,7 +496,7 @@ export default function SinglePropertyContainer({
                 style={{ backgroundColor: "#24a9e1" }}
                 onClick={() =>
                   router.push(
-                    `/property/${villa.name}/${villa.roomId}/checkAvailability`,
+                    `/property/${villa.name}/${villa.roomId}/checkAvailability?currency=${selectedCurrency}`,
                   )
                 }
               >

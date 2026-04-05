@@ -1,6 +1,7 @@
 // components/availability/availability-calendar.tsx
 "use client";
 
+import { useCurrencyFormat } from "@/hooks/use-currency-format";
 import { AvailabilityDate } from "@/types/availablity";
 import { Villa, VillaMinimumStay } from "@/types/property";
 import { useMemo, useState } from "react";
@@ -66,13 +67,6 @@ function getMinStayForDate(
   return match?.nights ?? minimumStay[0]?.nights ?? 1;
 }
 
-function fmt(amount: number, currency: string): string {
-  return `${currency} ${amount.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
-}
-
 export default function AvailabilityCalendar({
   dates,
   minimumStay,
@@ -88,6 +82,8 @@ export default function AvailabilityCalendar({
     });
     return map;
   }, [dates]);
+
+  const { format } = useCurrencyFormat();
 
   // With this:
   const initialDate = defaultCheckIn
@@ -341,15 +337,22 @@ export default function AvailabilityCalendar({
             onChange={(e) => setGuests(Number(e.target.value))}
             className="w-full appearance-none pl-8 pr-8 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-[12px] font-medium text-slate-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#24a9e1]/30 focus:border-[#24a9e1]"
           >
-            {Array.from({ length: maxGuestCount }, (_, i) => i + 1).map((n) => (
-              <option key={n} value={n}>
-                {n} {n === 1 ? "Guest" : "Guests"}
-                {n === villa.capacity.baseGuests ? " (base)" : ""}
-                {n > villa.capacity.baseGuests
-                  ? ` (+${villa.price.currency} ${villa.capacity.extraGuestFee}/night extra)`
-                  : ""}
-              </option>
-            ))}
+            {Array.from({ length: maxGuestCount }, (_, i) => i + 1).map((n) => {
+              const extraLabel =
+                n > villa.capacity.baseGuests
+                  ? ` (+${format(villa.capacity.extraGuestFee, villa.price.currency)}/night extra)`
+                  : "";
+              const baseLabel =
+                n === villa.capacity.baseGuests ? " (base)" : "";
+
+              return (
+                <option key={n} value={n}>
+                  {n} {n === 1 ? "Guest" : "Guests"}
+                  {baseLabel}
+                  {extraLabel}
+                </option>
+              );
+            })}
           </select>
           <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
             <svg
@@ -557,11 +560,11 @@ export default function AvailabilityCalendar({
           <div className="px-4 py-3 bg-white space-y-2.5">
             <div className="flex justify-between items-center">
               <span className="text-[12px] text-slate-500">
-                {fmt(pricing.perNight, pricing.currency)} × {nights} night
+                {format(pricing.perNight, pricing.currency)} × {nights} night
                 {nights > 1 ? "s" : ""}
               </span>
               <span className="text-[12px] font-medium text-slate-700">
-                {fmt(pricing.accommodation, pricing.currency)}
+                {format(pricing.accommodation, pricing.currency)}
               </span>
             </div>
 
@@ -572,7 +575,7 @@ export default function AvailabilityCalendar({
                   {nights} night{nights > 1 ? "s" : ""})
                 </span>
                 <span className="text-[12px] font-medium text-slate-700">
-                  {fmt(pricing.extraGuestCharge, pricing.currency)}
+                  {format(pricing.extraGuestCharge, pricing.currency)}
                 </span>
               </div>
             )}
@@ -581,7 +584,7 @@ export default function AvailabilityCalendar({
               <div className="flex justify-between items-center">
                 <span className="text-[12px] text-slate-500">Cleaning fee</span>
                 <span className="text-[12px] font-medium text-slate-700">
-                  {fmt(pricing.cleaning, pricing.currency)}
+                  {format(pricing.cleaning, pricing.currency)}
                 </span>
               </div>
             )}
@@ -592,7 +595,7 @@ export default function AvailabilityCalendar({
                   Taxes ({villa.taxPercent}%)
                 </span>
                 <span className="text-[12px] font-medium text-slate-700">
-                  {fmt(pricing.tax, pricing.currency)}
+                  {format(pricing.tax, pricing.currency)}
                 </span>
               </div>
             )}
@@ -602,7 +605,7 @@ export default function AvailabilityCalendar({
                 Total
               </span>
               <span className="text-[15px] font-bold text-[#0f1f2e]">
-                {fmt(pricing.total, pricing.currency)}
+                {format(pricing.total, pricing.currency)}
               </span>
             </div>
           </div>
