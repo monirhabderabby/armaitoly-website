@@ -60,5 +60,21 @@ export function useCurrencyFormat() {
     return `${converted.toFixed(2)} ${selectedCurrency}`;
   }
 
-  return { format, convert, selectedCurrency, isLoading, isError };
+  function getConvertedAmount(amount: number, from: string): number | null {
+    if (!rates) return null;
+
+    const converted = convert(amount, from, selectedCurrency);
+    if (converted === null || isNaN(converted)) return null;
+
+    return converted; // ✅ only number
+  }
+
+  return {
+    format,
+    convert,
+    getConvertedAmount,
+    selectedCurrency,
+    isLoading,
+    isError,
+  };
 }

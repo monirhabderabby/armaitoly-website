@@ -37,18 +37,30 @@ export default function AvailabilityEntry({
   const [state, setState] = useState<"timeSlots" | "payment">("timeSlots");
   const [timeSlotsData, setTimeSlotData] =
     useState<OnBookingSubmitProps | null>(null);
-  const { selectedCurrency } = useCurrencyFormat();
+  const { selectedCurrency, getConvertedAmount } = useCurrencyFormat();
 
   const { isPending: isBookingPending, mutateAsync: createBooking } =
     useCreateBooking();
-  const { data, isLoading, isError, error } = useGetSingleProperty(roomId);
+  const {
+    data: roomData,
+    isLoading,
+    isError,
+    error,
+  } = useGetSingleProperty(roomId);
   const { mutateAsync: createPaymentIntent, isPending: isIntentPending } =
     useCreatePaymentIntent();
 
-  const handleNext = (data: OnBookingSubmitProps) => {
-    setTimeSlotData(data);
+  const handleNext = (values: OnBookingSubmitProps) => {
+    setTimeSlotData(values);
+
     setState("payment");
   };
+
+  // convert(
+  //         values.totalAmount,
+  //         data?.data.price.currency!,
+  //         selectedCurrency,
+  //       ) ?? values.totalAmount,
 
   const onPayment = async (data: {
     guest: GuestData;
@@ -106,7 +118,15 @@ export default function AvailabilityEntry({
     // ── Step 2: Create payment intent ──────────────────────────────────────
     try {
       const bookId = String(bookingResult.data.bookId);
-      const depositAmount = Math.round(timeSlotsData.totalAmount * 0.3);
+      // const depositAmount = Math.round(timeSlotsData.totalAmount * 0.3);
+
+      const convertedTotalAmount =
+        getConvertedAmount(
+          timeSlotsData.totalAmount,
+          roomData?.data?.price?.currency ?? "THB",
+        ) ?? timeSlotsData.totalAmount;
+
+      const depositAmount = Math.round(convertedTotalAmount * 0.3);
 
       const intentResult = await createPaymentIntent({
         bookId,
@@ -142,11 +162,12 @@ export default function AvailabilityEntry({
     );
   } else if (isError) {
     content = <p>{error.message}</p>;
-  } else if (data && data.data) {
-    const roomName = data.data.name;
-    const currency = data.data.price.currency;
-    const image = data.data.images?.length > 0 ? data.data.images[0].url : "";
-    const location = data.data.location;
+  } else if (roomData && roomData.data) {
+    const roomName = roomData.data.name;
+    const currency = roomData.data.price.currency;
+    const image =
+      roomData.data.images?.length > 0 ? roomData.data.images[0].url : "";
+    const location = roomData.data.location;
 
     content = (
       <div>
@@ -160,7 +181,7 @@ export default function AvailabilityEntry({
               defaultCheckIn={startDate} // ← calendar pre-selection (undefined when absent)
               defaultCheckOut={endDate}
               onNext={handleNext}
-              room={data.data}
+              room={roomData.data}
             />
           </ResizablePanel.Content>
           <ResizablePanel.Content value="payment">
@@ -174,7 +195,9 @@ export default function AvailabilityEntry({
                   guests: timeSlotsData.guests,
                   location,
                   name: roomName,
-                  total: timeSlotsData.totalAmount,
+                  total:
+                    getConvertedAmount(timeSlotsData.totalAmount, currency) ??
+                    timeSlotsData.totalAmount,
                   currency,
                   image,
                 }}

@@ -75,7 +75,7 @@ export function BookingSummary({
   setVoucher,
 }: BookingSummaryProps) {
   const [voucherApplied, setVoucherApplied] = useState(false);
-  const { format, isLoading } = useCurrencyFormat();
+  const { selectedCurrency, isLoading } = useCurrencyFormat();
 
   const detailRows = [
     { label: "Check-in", value: moment(villa.checkIn).format("MMMM D, YYYY") },
@@ -193,7 +193,7 @@ export function BookingSummary({
                 </span>
               ) : (
                 <span className="text-2xl font-extrabold text-gray-900">
-                  {format(villa.total, villa.currency!)}
+                  {villa.total} {selectedCurrency}
                 </span>
               )}
             </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { PaymentIntentData } from "@/hooks/booking/use-create-payment-intent";
+import { useCurrencyFormat } from "@/hooks/use-currency-format";
 import moment from "moment";
 import { useState } from "react";
 import { BookingSummary, VillaInfo } from "./Bookingsummary";
@@ -39,7 +40,7 @@ const defaultVilla: VillaInfo = {
   guests: 4,
   cleaningFee: 850,
   total: 1300,
-  currency: "USD",
+  currency: "THB",
 };
 
 const Steps = ({ current }: { current: number }) => (
@@ -81,6 +82,7 @@ export default function PaymentFormContainer({
   const [step] = useState<1 | 2 | 3>(1);
   const [guestData, setGuestData] = useState<GuestData | null>(null);
   const [voucher, setVoucher] = useState("");
+  const { selectedCurrency } = useCurrencyFormat();
 
   // Store full PaymentIntentData from API (includes publishableKey)
   const [paymentIntent] = useState<PaymentIntentData | null>(null);
@@ -110,7 +112,7 @@ export default function PaymentFormContainer({
         <h1 className="text-2xl font-bold tracking-tight text-gray-900">
           {step === 3
             ? "You're all set!"
-            : `${villa.name} requires a payment of ${villa.total.toLocaleString()} ${villa.currency}`}
+            : `${villa.name} requires a payment of ${villa.total.toLocaleString()} ${selectedCurrency}`}
         </h1>
         {step < 3 && (
           <p className="mt-1 text-sm text-gray-500">
