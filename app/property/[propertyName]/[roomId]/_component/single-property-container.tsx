@@ -1,160 +1,22 @@
 "use client";
 
+import CurrencySwitcher from "@/components/shared/CurrencySwitcher";
+import {
+  IconCheck,
+  IconChevronLeft,
+  IconChevronRight,
+  IconMapPin,
+  IconMoon,
+  IconStar,
+  IconUsers,
+  IconWifi,
+} from "@/constants/icons";
 import { useGetSingleProperty } from "@/hooks/property/use-get-single-property";
 import Image from "next/image";
 import { useRouter } from "nextjs-toploader/app";
 import { useState } from "react";
-
-// ─── Icons (inline SVG to avoid extra deps) ──────────────────────────────────
-const IconChevronLeft = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polyline points="15 18 9 12 15 6" />
-  </svg>
-);
-const IconChevronRight = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polyline points="9 18 15 12 9 6" />
-  </svg>
-);
-const IconMapPin = () => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-    <circle cx="12" cy="10" r="3" />
-  </svg>
-);
-const IconUsers = () => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-    <circle cx="9" cy="7" r="4" />
-    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-  </svg>
-);
-const IconMoon = () => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-  </svg>
-);
-const IconShield = () => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-  </svg>
-);
-const IconShare = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="18" cy="5" r="3" />
-    <circle cx="6" cy="12" r="3" />
-    <circle cx="18" cy="19" r="3" />
-    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-  </svg>
-);
-const IconCheck = () => (
-  <svg
-    width="13"
-    height="13"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polyline points="20 6 9 17 4 12" />
-  </svg>
-);
-const IconWifi = () => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M5 12.55a11 11 0 0 1 14.08 0" />
-    <path d="M1.42 9a16 16 0 0 1 21.16 0" />
-    <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
-    <line x1="12" y1="20" x2="12.01" y2="20" />
-  </svg>
-);
-const IconStar = () => (
-  <svg
-    width="13"
-    height="13"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    stroke="currentColor"
-    strokeWidth="1"
-  >
-    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-  </svg>
-);
+import FeesDisplay from "./fees-display";
+import PriceDisplay from "./price-display";
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
 const Skeleton = ({ className }: { className?: string }) => (
@@ -252,10 +114,14 @@ export default function SinglePropertyContainer({
   const kitchen = villa.kitchen;
 
   const poolAndWellness = villa.poolAndWellness;
+  const currencyFromApi = villa.price.currency;
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <section className="mx-auto max-w-6xl px-4 py-10 lg:px-8">
+      <div className="flex justify-end w-full ">
+        <CurrencySwitcher defaultCurrency={currencyFromApi} />
+      </div>
       {/* ── Image Gallery ─────────────────────────────────────────────────── */}
       <div
         className="relative overflow-hidden rounded-2xl bg-gray-100 shadow-md"
@@ -577,22 +443,16 @@ export default function SinglePropertyContainer({
         </div>
 
         {/* ── RIGHT: Booking Card ──────────────────────────────────────────── */}
+        {/* ── RIGHT: Booking Card ──────────────────────────────────────────── */}
         <div className="lg:col-span-1">
           <div className="sticky top-24 rounded-2xl border border-gray-100 bg-white shadow-xl shadow-gray-100/80 overflow-hidden">
             {/* Price header */}
-            <div className="px-6 pt-6 pb-5 border-b border-gray-100">
-              <div className="flex items-end gap-2">
-                <span className="text-3xl font-extrabold text-gray-900">
-                  {villa.price.amount.toLocaleString()}
-                </span>
-                <span className="mb-0.5 text-sm font-semibold text-gray-500">
-                  {villa.price.currency} / {villa.price.per}
-                </span>
-              </div>
-              <p className="mt-1 text-xs text-gray-400">
-                Base rate for up to {villa.capacity.baseGuests} guests
-              </p>
-            </div>
+            <PriceDisplay
+              amount={villa.price.amount}
+              fromCurrency={currencyFromApi}
+              per={villa.price.per}
+              baseGuests={villa.capacity.baseGuests}
+            />
 
             {/* Offers */}
             {villa.offers?.length > 0 && (
@@ -617,40 +477,13 @@ export default function SinglePropertyContainer({
             )}
 
             {/* Fees */}
-            <div className="px-6 py-4 space-y-3 border-b border-gray-100">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500">Extra guest fee</span>
-                <span className="font-medium text-gray-800">
-                  +{villa.capacity.extraGuestFee} {villa.capacity.currency} /
-                  guest
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="flex items-center gap-1.5 text-gray-500">
-                  <IconShield /> Security deposit
-                </span>
-                <span className="font-medium text-gray-800">
-                  {villa.securityDeposit.toLocaleString()}{" "}
-                  {villa.price.currency}
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500">Cleaning fee</span>
-                <span className="font-medium text-gray-800">
-                  {villa.cleaningFee === 0
-                    ? "Free"
-                    : `${villa.cleaningFee} ${villa.price.currency}`}
-                </span>
-              </div>
-              {villa.taxPercent > 0 && (
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500">Tax</span>
-                  <span className="font-medium text-gray-800">
-                    {villa.taxPercent}%
-                  </span>
-                </div>
-              )}
-            </div>
+            <FeesDisplay
+              extraGuestFee={villa.capacity.extraGuestFee}
+              securityDeposit={villa.securityDeposit}
+              cleaningFee={villa.cleaningFee}
+              taxPercent={villa.taxPercent}
+              fromCurrency={currencyFromApi}
+            />
 
             {/* CTA */}
             <div className="px-6 py-5">
