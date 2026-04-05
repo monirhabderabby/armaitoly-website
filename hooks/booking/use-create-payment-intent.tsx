@@ -6,6 +6,7 @@ interface CreatePaymentIntentPayload {
   amount: number;
   deposit: string;
   status: string;
+  currency: string;
 }
 
 export interface PaymentIntentData {

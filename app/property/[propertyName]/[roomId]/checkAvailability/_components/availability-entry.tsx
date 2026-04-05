@@ -7,6 +7,7 @@ import {
   useCreatePaymentIntent,
 } from "@/hooks/booking/use-create-payment-intent";
 import { useGetSingleProperty } from "@/hooks/property/use-get-single-property";
+import { useCurrencyFormat } from "@/hooks/use-currency-format";
 import { CreateBookingResponse } from "@/types/booking";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -36,6 +37,7 @@ export default function AvailabilityEntry({
   const [state, setState] = useState<"timeSlots" | "payment">("timeSlots");
   const [timeSlotsData, setTimeSlotData] =
     useState<OnBookingSubmitProps | null>(null);
+  const { selectedCurrency } = useCurrencyFormat();
 
   const { isPending: isBookingPending, mutateAsync: createBooking } =
     useCreateBooking();
@@ -111,6 +113,7 @@ export default function AvailabilityEntry({
         amount: depositAmount,
         deposit: "Deposit 30%",
         status: "Payment",
+        currency: selectedCurrency,
       });
 
       if (!intentResult.success) {

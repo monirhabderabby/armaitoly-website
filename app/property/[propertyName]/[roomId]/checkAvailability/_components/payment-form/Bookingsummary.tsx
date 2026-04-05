@@ -1,5 +1,6 @@
 "use client";
 
+import { useCurrencyFormat } from "@/hooks/use-currency-format";
 import moment from "moment";
 import { useState } from "react";
 
@@ -74,6 +75,7 @@ export function BookingSummary({
   setVoucher,
 }: BookingSummaryProps) {
   const [voucherApplied, setVoucherApplied] = useState(false);
+  const { format, isLoading } = useCurrencyFormat();
 
   const detailRows = [
     { label: "Check-in", value: moment(villa.checkIn).format("MMMM D, YYYY") },
@@ -185,12 +187,15 @@ export function BookingSummary({
               Grand Total
             </span>
             <div className="text-right">
-              <span className="text-2xl font-extrabold text-gray-900">
-                {villa.total.toLocaleString()}
-              </span>
-              <span className="ml-1 text-sm font-medium text-gray-400">
-                {villa.currency}
-              </span>
+              {isLoading ? (
+                <span className="text-2xl font-extrabold text-gray-900 animate-pulse">
+                  —
+                </span>
+              ) : (
+                <span className="text-2xl font-extrabold text-gray-900">
+                  {format(villa.total, villa.currency!)}
+                </span>
+              )}
             </div>
           </div>
           <p className="mt-1.5 text-xs text-gray-400">
