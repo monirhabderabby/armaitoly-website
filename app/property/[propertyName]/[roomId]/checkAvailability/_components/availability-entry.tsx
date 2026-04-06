@@ -10,20 +10,30 @@ import { useGetSingleProperty } from "@/hooks/property/use-get-single-property";
 import { useCurrencyFormat } from "@/hooks/use-currency-format";
 import { CreateBookingResponse } from "@/types/booking";
 import { Loader2 } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import { toast } from "sonner";
 import { OnBookingSubmitProps } from "./availability-calendar";
 import AvailabilityContainer from "./availability-container";
 import { GuestData } from "./payment-form/Guestinfoform";
 import PaymentFormContainer from "./payment-form/Paymentformcontainer";
+const DepositConfirmation = dynamic(() => import("./deposit-confirmation"), {
+  ssr: false,
+});
 
 interface Props {
   propId: string;
   roomId: string;
-  fetchStartDate: string; // always has a value — used for the API call
-  fetchEndDate: string; // always has a value — used for the API call
-  startDate?: string; // only set when the URL contained it — pre-selects calendar
+  fetchStartDate: string;
+  fetchEndDate: string;
+  startDate?: string;
   endDate?: string;
+}
+
+/** Shape of the pending payment payload while the modal is open */
+interface PendingPayment {
+  data: { guest: GuestData; card: null; voucher: string };
+  resolve: (result: PaymentIntentData | false) => void;
 }
 
 export default function AvailabilityEntry({
@@ -37,6 +47,12 @@ export default function AvailabilityEntry({
   const [state, setState] = useState<"timeSlots" | "payment">("timeSlots");
   const [timeSlotsData, setTimeSlotData] =
     useState<OnBookingSubmitProps | null>(null);
+
+  /** Non-null while the deposit modal is open */
+  const [pendingPayment, setPendingPayment] = useState<PendingPayment | null>(
+    null,
+  );
+
   const { selectedCurrency, getConvertedAmount } = useCurrencyFormat();
 
   const { isPending: isBookingPending, mutateAsync: createBooking } =
@@ -52,25 +68,37 @@ export default function AvailabilityEntry({
 
   const handleNext = (values: OnBookingSubmitProps) => {
     setTimeSlotData(values);
-
     setState("payment");
   };
 
-  const onPayment = async (data: {
+  // ── Step 1: show the modal; actual work happens after confirmation ──────
+  const onPayment = (data: {
     guest: GuestData;
     card: null;
     voucher: string;
   }): Promise<PaymentIntentData | false> => {
+    return new Promise<PaymentIntentData | false>((resolve) => {
+      setPendingPayment({ data, resolve });
+    });
+  };
+
+  // ── Confirmed from modal → run booking + payment intent ─────────────────
+  const handleDepositConfirm = async () => {
+    if (!pendingPayment) return;
+    const { data, resolve } = pendingPayment;
+    setPendingPayment(null); // close modal immediately
+
     if (!timeSlotsData) {
       toast.error("Check-in and check-out data missing!");
-      return false;
+      resolve(false);
+      return;
     }
 
     const guest = data.guest;
 
-    // ── Step 1: Create booking ─────────────────────────────────────────────
+    // Step 1: Create booking
     const bookingResult = await new Promise<CreateBookingResponse | false>(
-      (resolve) => {
+      (res) => {
         createBooking(
           {
             roomId,
@@ -92,35 +120,34 @@ export default function AvailabilityEntry({
           {
             onError: (error) => {
               toast.error(error.message ?? "Booking creation failed");
-              resolve(false);
+              res(false);
             },
-            onSuccess: (res: CreateBookingResponse) => {
-              if (!res.success) {
-                toast.error(res.message ?? "Booking creation failed");
-                resolve(false);
+            onSuccess: (r: CreateBookingResponse) => {
+              if (!r.success) {
+                toast.error(r.message ?? "Booking creation failed");
+                res(false);
                 return;
               }
-              resolve(res);
+              res(r);
             },
           },
         );
       },
     );
 
-    if (!bookingResult) return false;
+    if (!bookingResult) {
+      resolve(false);
+      return;
+    }
 
-    // ── Step 2: Create payment intent ──────────────────────────────────────
+    // Step 2: Create payment intent
     try {
       const bookId = String(bookingResult.data.bookId);
-      // const depositAmount = Math.round(timeSlotsData.totalAmount * 0.3);
-
-      const convertedTotalAmount =
-        getConvertedAmount(
-          timeSlotsData.totalAmount,
-          roomData?.data?.price?.currency ?? "THB",
-        ) ?? timeSlotsData.totalAmount;
-
-      const depositAmount = Math.round(convertedTotalAmount * 0.3);
+      const currency = roomData?.data?.price?.currency ?? "THB";
+      const converted =
+        getConvertedAmount(timeSlotsData.totalAmount, currency) ??
+        timeSlotsData.totalAmount;
+      const depositAmount = Math.round(converted * 0.3);
 
       const intentResult = await createPaymentIntent({
         bookId,
@@ -132,20 +159,37 @@ export default function AvailabilityEntry({
 
       if (!intentResult.success) {
         toast.error(intentResult.message ?? "Failed to initialise payment");
-        return false;
+        resolve(false);
+        return;
       }
 
-      // Return full PaymentIntentData — publishableKey is inside
-      return intentResult.data;
+      resolve(intentResult.data);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       toast.error(err.message ?? "Payment initialisation failed");
-      return false;
+      resolve(false);
     }
+  };
+
+  // ── Dismissed from modal ────────────────────────────────────────────────
+  const handleDepositClose = () => {
+    if (!pendingPayment) return;
+    pendingPayment.resolve(false);
+    setPendingPayment(null);
   };
 
   const paymentIsOngoing = isBookingPending || isIntentPending;
 
+  // ── Derived deposit figures for the modal display ───────────────────────
+  const currency = roomData?.data?.price?.currency ?? "THB";
+  const convertedTotal = timeSlotsData
+    ? (getConvertedAmount(timeSlotsData.totalAmount, currency) ??
+      timeSlotsData.totalAmount)
+    : 0;
+  const depositAmt = Math.round(convertedTotal * 0.3);
+  const remainingAmt = Math.round(convertedTotal * 0.7);
+
+  // ── Main render ─────────────────────────────────────────────────────────
   let content;
 
   if (isLoading) {
@@ -158,7 +202,6 @@ export default function AvailabilityEntry({
     content = <p>{error.message}</p>;
   } else if (roomData && roomData.data) {
     const roomName = roomData.data.name;
-    const currency = roomData.data.price.currency;
     const image =
       roomData.data.images?.length > 0 ? roomData.data.images[0].url : "";
     const location = roomData.data.location;
@@ -170,9 +213,9 @@ export default function AvailabilityEntry({
             <AvailabilityContainer
               propId={propId}
               roomId={roomId}
-              startDate={fetchStartDate} // ← API fetch range
+              startDate={fetchStartDate}
               endDate={fetchEndDate}
-              defaultCheckIn={startDate} // ← calendar pre-selection (undefined when absent)
+              defaultCheckIn={startDate}
               defaultCheckOut={endDate}
               onNext={handleNext}
               room={roomData.data}
@@ -189,9 +232,7 @@ export default function AvailabilityEntry({
                   guests: timeSlotsData.guests,
                   location,
                   name: roomName,
-                  total:
-                    getConvertedAmount(timeSlotsData.totalAmount, currency) ??
-                    timeSlotsData.totalAmount,
+                  total: convertedTotal,
                   currency,
                   image,
                 }}
@@ -200,6 +241,22 @@ export default function AvailabilityEntry({
             )}
           </ResizablePanel.Content>
         </ResizablePanel.Root>
+
+        {/* ── Deposit confirmation modal (portal-like, mounts when modal is open) ── */}
+        {pendingPayment && timeSlotsData && (
+          <DepositConfirmation
+            villaName={roomName}
+            checkIn={timeSlotsData.checkIn}
+            checkOut={timeSlotsData.checkOut}
+            guests={timeSlotsData.guests}
+            currency={selectedCurrency}
+            totalAmount={convertedTotal.toLocaleString()}
+            depositAmount={depositAmt.toLocaleString()}
+            remainingAmount={remainingAmt.toLocaleString()}
+            onConfirm={handleDepositConfirm}
+            onClose={handleDepositClose}
+          />
+        )}
       </div>
     );
   }

@@ -31,7 +31,7 @@ function getMonthName(year: number, month: number, locale: string): string {
   }).format(new Date(year, month, 1));
 }
 
-const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+// const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTHS = [
   "January",
   "February",
