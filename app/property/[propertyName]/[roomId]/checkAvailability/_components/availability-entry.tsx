@@ -56,12 +56,6 @@ export default function AvailabilityEntry({
     setState("payment");
   };
 
-  // convert(
-  //         values.totalAmount,
-  //         data?.data.price.currency!,
-  //         selectedCurrency,
-  //       ) ?? values.totalAmount,
-
   const onPayment = async (data: {
     guest: GuestData;
     card: null;

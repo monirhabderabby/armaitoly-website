@@ -297,6 +297,14 @@ export default function AvailabilityCalendar({
     return () => observer.disconnect();
   }, []);
 
+  function getWeekDays(locale: string): string[] {
+    return Array.from({ length: 7 }, (_, i) =>
+      new Intl.DateTimeFormat(locale, { weekday: "short" }).format(
+        new Date(2021, 0, 3 + i), // Jan 3 2021 = Sunday
+      ),
+    );
+  }
+
   return (
     <div className="w-full">
       {/* ── Check-in / Check-out ── */}
@@ -450,7 +458,7 @@ export default function AvailabilityCalendar({
 
         {/* Unified 7-col grid */}
         <div className="grid grid-cols-7 px-2 pt-1 pb-2 gap-0.5">
-          {DAYS.map((d) => (
+          {getWeekDays(locale).map((d) => (
             <div
               key={d}
               className="py-2 text-center text-[10px] font-semibold text-slate-400 uppercase tracking-wide"
