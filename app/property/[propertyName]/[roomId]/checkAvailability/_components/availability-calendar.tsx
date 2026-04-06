@@ -24,6 +24,15 @@ interface Props {
   defaultCheckOut?: string | null;
 }
 
+function getMonthName(year: number, month: number): string {
+  return new Intl.DateTimeFormat(
+    typeof document !== "undefined"
+      ? document.documentElement.lang || "en"
+      : "en",
+    { month: "long", year: "numeric" },
+  ).format(new Date(year, month, 1));
+}
+
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTHS = [
   "January",
@@ -401,7 +410,7 @@ export default function AvailabilityCalendar({
             </svg>
           </button>
           <p className="text-[13px] font-semibold text-slate-700">
-            {MONTHS[viewMonth]} {viewYear}
+            {getMonthName(viewYear, viewMonth)}
           </p>
           <button
             onClick={nextMonth}
