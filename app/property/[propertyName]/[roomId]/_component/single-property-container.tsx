@@ -406,22 +406,22 @@ export default function SinglePropertyContainer({
               {villa.minimumStay.map((stay, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between rounded-xl border border-gray-100 bg-white px-5 py-4 shadow-sm"
+                  className="flex flex-col gap-3 rounded-xl border border-gray-100 bg-white px-5 py-4 shadow-sm"
                 >
                   <div>
                     <p className="text-xs text-gray-400 mb-0.5">Months</p>
-                    <p className="text-sm font-medium text-gray-700">
+                    <p className="text-sm font-medium text-gray-700 wrap-break-words">
                       {stay.months}
                     </p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-xs text-gray-400 mb-0.5">Min. Nights</p>
+                  <div className="flex items-end gap-x-2">
                     <p
-                      className="text-2xl font-bold"
+                      className="text-2xl font-bold leading-tight"
                       style={{ color: "#24a9e1" }}
                     >
                       {stay.nights}
                     </p>
+                    <p className="text-xs text-gray-400 mb-0.5">Min. Nights</p>
                   </div>
                 </div>
               ))}
