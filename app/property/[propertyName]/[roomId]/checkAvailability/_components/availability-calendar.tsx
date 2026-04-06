@@ -4,7 +4,7 @@
 import { useCurrencyFormat } from "@/hooks/use-currency-format";
 import { AvailabilityDate } from "@/types/availablity";
 import { Villa, VillaMinimumStay } from "@/types/property";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import PolicyContainer from "./policy-container";
 
 export interface OnBookingSubmitProps {
@@ -24,13 +24,11 @@ interface Props {
   defaultCheckOut?: string | null;
 }
 
-function getMonthName(year: number, month: number): string {
-  return new Intl.DateTimeFormat(
-    typeof document !== "undefined"
-      ? document.documentElement.lang || "en"
-      : "en",
-    { month: "long", year: "numeric" },
-  ).format(new Date(year, month, 1));
+function getMonthName(year: number, month: number, locale: string): string {
+  return new Intl.DateTimeFormat(locale, {
+    month: "long",
+    year: "numeric",
+  }).format(new Date(year, month, 1));
 }
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -84,6 +82,8 @@ export default function AvailabilityCalendar({
   defaultCheckIn,
   defaultCheckOut,
 }: Props) {
+  const [locale, setLocale] = useState("en");
+
   const dateMap = useMemo(() => {
     const map: Record<string, AvailabilityDate> = {};
     dates.forEach((d) => {
@@ -280,6 +280,23 @@ export default function AvailabilityCalendar({
 
   const maxGuestCount = Math.max((villa.capacity.baseGuests ?? 2) * 2, 10);
 
+  useEffect(() => {
+    const updateLocale = () => {
+      const lang = document.documentElement.lang || "en";
+      // Google Translate uses codes like "de", "fr", "es"
+      setLocale(lang);
+    };
+
+    // Poll for lang attribute changes (Google Translate updates this)
+    const observer = new MutationObserver(updateLocale);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["lang"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="w-full">
       {/* ── Check-in / Check-out ── */}
@@ -410,7 +427,7 @@ export default function AvailabilityCalendar({
             </svg>
           </button>
           <p className="text-[13px] font-semibold text-slate-700">
-            {getMonthName(viewYear, viewMonth)}
+            {getMonthName(viewYear, viewMonth, locale)}
           </p>
           <button
             onClick={nextMonth}
