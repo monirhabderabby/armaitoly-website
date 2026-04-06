@@ -1,8 +1,10 @@
 // app/[propertyName]/[roomId]/_components/availability-container.tsx
 "use client";
 
+import CurrencySwitcher from "@/components/shared/CurrencySwitcher";
 import { useGetAvailability } from "@/hooks/availability/use-get-availablity";
 import { Villa } from "@/types/property";
+import { useSearchParams } from "next/navigation";
 import AvailabilityCalendar, {
   OnBookingSubmitProps,
 } from "./availability-calendar";
@@ -279,6 +281,9 @@ export default function AvailabilityContainer({
     refetch,
   } = useGetAvailability({ roomId, startDate, endDate });
 
+  const searchParams = useSearchParams();
+  const defaultCurrency = searchParams.get("currency") ?? room.price.currency;
+
   // const { data: propertyData } = useGetSingleProperty(roomId);
 
   // const room = propertyData?.data;
@@ -351,6 +356,9 @@ export default function AvailabilityContainer({
           Select your dates and secure your Italian escape. Best rates
           guaranteed when booking directly.
         </p>
+      </div>
+      <div>
+        <CurrencySwitcher defaultCurrency={defaultCurrency} />
       </div>
       <AvailabilityCalendar
         dates={availabilityData.data.dates}
