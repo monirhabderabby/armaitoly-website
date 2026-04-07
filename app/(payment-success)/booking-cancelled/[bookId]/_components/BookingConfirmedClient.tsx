@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetSingleBooking } from "@/hooks/booking/use-get-single-booking";
+import { useVerifyBookingPayment } from "@/hooks/booking/use-verify-booking-payment";
 import moment from "moment";
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
@@ -165,7 +165,9 @@ function Skeleton() {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function BookingConfirmedClient({ bookId }: { bookId: string }) {
-  const { data, isLoading, isError, error } = useGetSingleBooking(bookId);
+  const { data, isLoading, isError, error } = useVerifyBookingPayment({
+    bookId,
+  });
 
   if (isLoading) return <Skeleton />;
 
