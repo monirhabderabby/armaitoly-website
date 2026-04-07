@@ -61,23 +61,34 @@ function formatDisplay(dateStr: string): string {
   });
 }
 
+const MONTH_ALIASES: Record<string, string> = {
+  ago: "aug", // Italian/Spanish abbreviation for August
+  ene: "jan", // Spanish January, add others as needed
+};
+
 function getMinStayForDate(
   dateStr: string,
   minimumStay: VillaMinimumStay[],
 ): number {
   if (!minimumStay?.length) return 1;
   const date = new Date(dateStr + "T00:00:00");
-  const monthName = MONTHS[date.getMonth()]; // e.g. "April"
+  const monthIndex = date.getMonth(); // 0-11
+  const fullName = MONTHS[monthIndex].toLowerCase(); // e.g. "april"
+  const shortName = fullName.slice(0, 3); // e.g. "apr"
 
-  const match = minimumStay.find((m) =>
-    m.months
+  const match = minimumStay.find((m) => {
+    const tokens = m.months
       .toLowerCase()
       .split("/")
-      .map((s) => s.trim())
-      .includes(monthName.toLowerCase()),
-  );
+      .map((s) => s.trim());
 
-  return match?.nights ?? minimumStay[0]?.nights ?? 1;
+    return tokens.some((token) => {
+      const normalized = MONTH_ALIASES[token] ?? token;
+      return normalized === fullName || normalized === shortName;
+    });
+  });
+
+  return match?.nights ?? 1; // ← default to 1, NOT minimumStay[0]
 }
 
 export default function AvailabilityCalendar({
