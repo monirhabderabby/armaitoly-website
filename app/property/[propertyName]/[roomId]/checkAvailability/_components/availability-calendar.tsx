@@ -67,10 +67,16 @@ function getMinStayForDate(
 ): number {
   if (!minimumStay?.length) return 1;
   const date = new Date(dateStr + "T00:00:00");
-  const monthName = MONTHS[date.getMonth()];
-  const match = minimumStay.find(
-    (m) => m.months.toLowerCase() === monthName.toLowerCase(),
+  const monthName = MONTHS[date.getMonth()]; // e.g. "April"
+
+  const match = minimumStay.find((m) =>
+    m.months
+      .toLowerCase()
+      .split("/")
+      .map((s) => s.trim())
+      .includes(monthName.toLowerCase()),
   );
+
   return match?.nights ?? minimumStay[0]?.nights ?? 1;
 }
 
