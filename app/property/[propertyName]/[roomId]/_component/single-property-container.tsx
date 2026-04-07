@@ -123,9 +123,6 @@ export default function SinglePropertyContainer({
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <section className="mx-auto max-w-6xl px-4 py-10 lg:px-8">
-      <div className="flex justify-end w-full ">
-        <CurrencySwitcher defaultCurrency={currencyFromApi} />
-      </div>
       {/* ── Image Gallery ─────────────────────────────────────────────────── */}
       <div
         className="relative overflow-hidden rounded-2xl bg-gray-100 shadow-md"
@@ -450,6 +447,9 @@ export default function SinglePropertyContainer({
         {/* ── RIGHT: Booking Card ──────────────────────────────────────────── */}
         <div className="lg:col-span-1">
           <div className="sticky top-24 rounded-2xl border border-gray-100 bg-white shadow-xl shadow-gray-100/80 overflow-hidden">
+            <div className="pt-5 pr-5">
+              <CurrencySwitcher defaultCurrency={currencyFromApi} />
+            </div>
             {/* Price header */}
             <PriceDisplay
               amount={villa.price.amount}
