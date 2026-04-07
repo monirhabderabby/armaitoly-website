@@ -594,7 +594,7 @@ export default function AvailabilityCalendar({
       <PolicyContainer />
 
       {/* ── Price breakdown + CTA ── */}
-      {checkIn && checkOut && nights && pricing && (
+      {!error && checkIn && checkOut && nights && pricing && (
         <div className="mt-4 rounded-xl border border-slate-200 overflow-hidden">
           {/* Summary header */}
           <div className="px-4 py-3 bg-slate-50 border-b border-slate-100">
@@ -665,7 +665,8 @@ export default function AvailabilityCalendar({
           <div className="px-4 pb-4 bg-white">
             <button
               onClick={handleNext}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-[#24a9e1] hover:bg-[#1a95cc] text-white text-[12px] font-semibold tracking-[0.05em] uppercase transition-all duration-200 hover:-translate-y-px shadow-sm cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-[#24a9e1] hover:bg-[#1a95cc] text-white text-[12px] font-semibold tracking-[0.05em] uppercase transition-all duration-200 hover:-translate-y-px shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!!error}
             >
               Continue to booking
               <svg
