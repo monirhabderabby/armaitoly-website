@@ -147,7 +147,14 @@ export default function AvailabilityEntry({
       const converted =
         getConvertedAmount(timeSlotsData.totalAmount, currency) ??
         timeSlotsData.totalAmount;
-      const depositAmount = Math.round(converted * 0.3);
+      const checkInDate = new Date(timeSlotsData.checkIn);
+      const oneMonthFromNow = new Date();
+      oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
+
+      const depositAmount =
+        checkInDate <= oneMonthFromNow
+          ? Math.round(converted) // full amount
+          : Math.round(converted * 0.3); // 30% deposit
 
       const intentResult = await createPaymentIntent({
         bookId,
@@ -186,8 +193,17 @@ export default function AvailabilityEntry({
     ? (getConvertedAmount(timeSlotsData.totalAmount, currency) ??
       timeSlotsData.totalAmount)
     : 0;
-  const depositAmt = Math.round(convertedTotal * 0.3);
-  const remainingAmt = Math.round(convertedTotal * 0.7);
+
+  const isWithinOneMonth = timeSlotsData
+    ? new Date(timeSlotsData.checkIn) <=
+      new Date(new Date().setMonth(new Date().getMonth() + 1))
+    : false;
+
+  const depositAmt = isWithinOneMonth
+    ? Math.round(convertedTotal) // 100% — full amount
+    : Math.round(convertedTotal * 0.3); // 30% — deposit
+
+  const remainingAmt = isWithinOneMonth ? 0 : Math.round(convertedTotal * 0.7);
 
   // ── Main render ─────────────────────────────────────────────────────────
   let content;
@@ -255,6 +271,11 @@ export default function AvailabilityEntry({
             remainingAmount={remainingAmt.toLocaleString()}
             onConfirm={handleDepositConfirm}
             onClose={handleDepositClose}
+            depositLabel={
+              isWithinOneMonth
+                ? "Full amount (check-in within 30 days)"
+                : "30% of total"
+            }
           />
         )}
       </div>

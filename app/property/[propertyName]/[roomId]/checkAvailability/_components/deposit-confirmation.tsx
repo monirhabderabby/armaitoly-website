@@ -14,6 +14,7 @@ interface Props {
   message?: string;
   onConfirm: () => void;
   onClose: () => void;
+  depositLabel?: string;
 }
 
 const DepositConfirmation = ({
@@ -28,6 +29,7 @@ const DepositConfirmation = ({
   message,
   onConfirm,
   onClose,
+  depositLabel,
 }: Props) => {
   const overlayRef = useRef<HTMLDivElement>(null);
 
@@ -113,7 +115,7 @@ const DepositConfirmation = ({
             <span className="text-gray-500">
               Deposit due now
               <span className="block text-[11px] text-gray-400">
-                30% of total
+                {depositLabel ?? "30% of total"}
               </span>
             </span>
             <span className="font-medium text-black dark:text-white">
@@ -148,7 +150,7 @@ const DepositConfirmation = ({
             <span className="mt-0.5 text-[#24a9e1]">ℹ</span>
             <p>
               {message ??
-                `By confirming, your card will be charged ${currency} ${depositAmount}. Remaining ${currency} ${remainingAmount} payable at check-in.`}
+                `By confirming, your card will be charged ${currency} ${depositAmount}. The remaining ${currency} ${remainingAmount} must be paid within 30 days of the check-in date.`}
             </p>
           </div>
         </div>
