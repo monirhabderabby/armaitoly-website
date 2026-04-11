@@ -66,6 +66,12 @@ export default function RootLayout({
         />
 
         <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS_ID!} />
+
+        <Script
+          src="https://embeds.iubenda.com/widgets/3fcd6cc2-1c59-450c-917a-67cd4782db0f.js"
+          strategy="afterInteractive" // or "lazyOnload" if it's not critical
+          async
+        />
       </body>
     </html>
   );
