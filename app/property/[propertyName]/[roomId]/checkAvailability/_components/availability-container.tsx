@@ -374,7 +374,7 @@ export default function AvailabilityContainer({
   );
 }
 
-function parseDateParam(raw: string | null): string | null {
+export function parseDateParam(raw: string | null | undefined): string | null {
   if (!raw || raw.length !== 8) return null;
   return `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)}`;
 }

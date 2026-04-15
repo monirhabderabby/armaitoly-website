@@ -42,10 +42,14 @@ const SectionHeading = ({ title }: { title: string }) => (
 // ─── Main Component ───────────────────────────────────────────────────────────
 interface SinglePropertyContainerProps {
   roomId: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export default function SinglePropertyContainer({
   roomId,
+  startDate,
+  endDate,
 }: SinglePropertyContainerProps) {
   const { data, isLoading, isError } = useGetSingleProperty(roomId);
   const [activeImage, setActiveImage] = useState(0);
@@ -496,7 +500,7 @@ export default function SinglePropertyContainer({
                 style={{ backgroundColor: "#24a9e1" }}
                 onClick={() =>
                   router.push(
-                    `/property/${villa.name}/${villa.roomId}/checkAvailability?currency=${selectedCurrency}`,
+                    `/property/${villa.name}/${villa.roomId}/checkAvailability?currency=${selectedCurrency}&startDate=${startDate}&endDate=${endDate}`,
                   )
                 }
               >

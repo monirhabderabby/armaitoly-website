@@ -7,13 +7,6 @@ function getBedrooms(bedroom: string[]): number {
   return bedroom.filter((b) => b.toLowerCase().includes("bed")).length;
 }
 
-function getViewLabel(location: string): string {
-  if (location.toLowerCase().includes("beach")) return "Sea View";
-  if (location.toLowerCase().includes("garden")) return "Garden View";
-  if (location.toLowerCase().includes("roof")) return "Ocean View";
-  return location;
-}
-
 // ── icons ──────────────────────────────────────────────────────────────────
 function GuestIcon() {
   return (
@@ -91,16 +84,19 @@ function WaveDecoration() {
 interface VillaCardProps {
   data: Villa;
   reversed?: boolean;
+  startDate?: string;
+  endDate?: string;
 }
 
 // ── component ──────────────────────────────────────────────────────────────
 export default function VillaCard({
   data: villa,
   reversed = false,
+  startDate,
+  endDate,
 }: VillaCardProps) {
   const maxGuests = villa.capacity.baseGuests;
   const bedrooms = getBedrooms(villa.bedroom);
-  const viewLabel = getViewLabel(villa.location);
 
   const firstLine = villa.description.split("\n")[0];
   const secondLine =
@@ -108,14 +104,23 @@ export default function VillaCard({
       .split("\n")
       .find((l) => l.trim().length > 40 && l.trim() !== firstLine.trim()) ?? "";
 
-  const specs = [
-    { icon: <GuestIcon />, label: `2–${maxGuests} Guests` },
+  const specs: { icon: React.ReactNode; label: React.ReactNode }[] = [
+    { icon: <GuestIcon />, label: `${maxGuests} Guests` },
     {
       icon: <BedroomIcon />,
-      label: `${bedrooms} Bedroom${bedrooms !== 1 ? "s" : ""}`,
+      label:
+        bedrooms === 2 ? (
+          <>
+            1 Bedroom
+            <br />
+            and 1 Living/Sleeping Area
+          </>
+        ) : (
+          `${bedrooms} Bedroom${bedrooms !== 1 ? "s" : ""}`
+        ),
     },
-    { icon: <ViewIcon />, label: viewLabel },
-    { icon: <SizeIcon />, label: "300 qm" },
+    { icon: <ViewIcon />, label: "Beach Front" },
+    { icon: <SizeIcon />, label: "60 sqm" },
   ];
 
   return (
@@ -170,13 +175,13 @@ export default function VillaCard({
 
         {/* specs */}
         <div className="flex flex-wrap gap-5 mt-2 pt-4 border-t border-slate-100">
-          {specs.map(({ icon, label }) => (
+          {specs.map(({ icon, label }, i) => (
             <div
-              key={label}
+              key={i}
               className="flex flex-col items-center gap-1.5 text-[#4a6274] min-w-14"
             >
               <span className="text-[#24a9e1]">{icon}</span>
-              <span className="text-[11px] font-semibold uppercase tracking-wide">
+              <span className="text-[11px] font-semibold uppercase tracking-wide text-center">
                 {label}
               </span>
             </div>
@@ -185,7 +190,13 @@ export default function VillaCard({
 
         {/* cta */}
         <Link
-          href={`/property/${villa.name}/${villa.roomId}`}
+          href={{
+            pathname: `/property/${villa.name}/${villa.roomId}`,
+            query: {
+              startDate,
+              endDate,
+            },
+          }}
           className="inline-flex w-fit items-center gap-2 font-sans text-[11px] font-semibold tracking-[0.07em] uppercase px-5 py-2.5 rounded-sm bg-[#24a9e1] text-white transition-all duration-200 hover:bg-[#1a95cc] hover:-translate-y-px shadow-sm shadow-[#24a9e1]/25 hover:shadow-md cursor-pointer"
         >
           View Details

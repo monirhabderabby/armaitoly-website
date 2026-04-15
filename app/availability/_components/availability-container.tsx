@@ -34,7 +34,7 @@ const formatDateForApi = (dateStr: string | null): string => {
   const year = d.getFullYear();
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  return `${year}${month}${day}`; // "20260601"
 };
 
 const AvailabilityContainer = () => {
@@ -143,7 +143,13 @@ const AvailabilityContainer = () => {
     content = (
       <div className="grid gap-10">
         {data.data.map((villa, idx) => (
-          <VillaCard key={villa.roomId} data={villa} reversed={idx % 2 !== 0} />
+          <VillaCard
+            key={villa.roomId}
+            data={villa}
+            reversed={idx % 2 !== 0}
+            startDate={checkIn}
+            endDate={checkOut}
+          />
         ))}
       </div>
     );

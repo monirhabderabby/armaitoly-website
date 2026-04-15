@@ -159,7 +159,8 @@ export default function AvailabilityEntry({
       const intentResult = await createPaymentIntent({
         bookId,
         amount: depositAmount,
-        deposit: "Deposit 30%",
+        deposit:
+          checkInDate <= oneMonthFromNow ? "Deposit Full" : "Deposit 30%",
         status: "Payment",
         currency: selectedCurrency,
       });
