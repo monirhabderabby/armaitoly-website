@@ -105,7 +105,7 @@ fbq('track', 'PageView');`,
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID!} />
 
         <Script
-          src="https://embeds.iubenda.com/widgets/3fcd6cc2-1c59-450c-917a-67cd4782db0f.js"
+          src="https://embeds.iubenda.com/widgets/cbac44de-7799-4c30-98fa-0ef5473b11f5.js"
           strategy="afterInteractive"
           async
         />

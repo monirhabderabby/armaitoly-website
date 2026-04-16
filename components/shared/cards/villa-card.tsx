@@ -193,8 +193,8 @@ export default function VillaCard({
           href={{
             pathname: `/property/${villa.name}/${villa.roomId}`,
             query: {
-              startDate,
-              endDate,
+              ...(startDate && { startDate }),
+              ...(endDate && { endDate }),
             },
           }}
           className="inline-flex w-fit items-center gap-2 font-sans text-[11px] font-semibold tracking-[0.07em] uppercase px-5 py-2.5 rounded-sm bg-[#24a9e1] text-white transition-all duration-200 hover:bg-[#1a95cc] hover:-translate-y-px shadow-sm shadow-[#24a9e1]/25 hover:shadow-md cursor-pointer"

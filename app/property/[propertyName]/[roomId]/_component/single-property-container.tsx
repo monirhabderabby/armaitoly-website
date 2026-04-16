@@ -498,11 +498,23 @@ export default function SinglePropertyContainer({
               <button
                 className="w-full rounded-xl py-3.5 text-sm font-bold text-white shadow-md transition-all duration-200 hover:opacity-90 hover:shadow-lg active:scale-95"
                 style={{ backgroundColor: "#24a9e1" }}
-                onClick={() =>
+                onClick={() => {
+                  const params = new URLSearchParams({
+                    currency: selectedCurrency,
+                  });
+
+                  if (startDate) {
+                    params.append("startDate", startDate);
+                  }
+
+                  if (endDate) {
+                    params.append("endDate", endDate);
+                  }
+
                   router.push(
-                    `/property/${villa.name}/${villa.roomId}/checkAvailability?currency=${selectedCurrency}&startDate=${startDate}&endDate=${endDate}`,
-                  )
-                }
+                    `/property/${villa.name}/${villa.roomId}/checkAvailability?${params.toString()}`,
+                  );
+                }}
               >
                 Check Availability
               </button>
