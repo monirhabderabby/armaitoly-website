@@ -9,13 +9,68 @@ import VillaCardSkeleton from "@/components/shared/skeleton/villa-card-skleton";
 import { useGetVillaByFilter } from "@/hooks/availability/use-get-billa-by-filter";
 import { useRouter, useSearchParams } from "next/navigation";
 
-function ErrorState({ message }: { message: string; onRetry: () => void }) {
+function getUserFriendlyMessage(error?: Error) {
+  if (!error) {
+    return {
+      title: "Something went wrong",
+      description: "We couldn’t complete your request. Please try again.",
+      action: "Retry",
+    };
+  }
+
+  const msg = error.message.toLowerCase();
+
+  if (msg.includes("no rooms available")) {
+    return {
+      title: "No rooms available",
+      description:
+        "Looks like all rooms are booked for your selected dates. Try changing your dates or check nearby options.",
+      action: "Try Again",
+    };
+  }
+
+  if (msg.includes("network")) {
+    return {
+      title: "Connection issue",
+      description:
+        "We’re having trouble connecting. Please check your internet and try again.",
+      action: "Retry",
+    };
+  }
+
+  return {
+    title: "Something went wrong",
+    description: "Please try again or come back later.",
+    action: "Retry",
+  };
+}
+
+function ErrorState({
+  title,
+  description,
+  onRetry,
+  actionLabel = "Try again",
+}: {
+  title: string;
+  description: string;
+  onRetry?: () => void;
+  actionLabel?: string;
+}) {
   return (
     <div className="flex flex-col items-center justify-center py-24 text-center">
-      <h3 className="text-xl font-semibold text-red-500">
-        Something went wrong
-      </h3>
-      <p className="text-muted-foreground mt-2">{message}</p>
+      <h3 className="text-xl font-semibold">{title}</h3>
+      <p className="text-muted-foreground mt-2 max-w-md text-[14px]">
+        {description}
+      </p>
+
+      {onRetry && (
+        <button
+          onClick={onRetry}
+          className="mt-4 px-4 py-2 rounded-md bg-primary text-white"
+        >
+          {actionLabel}
+        </button>
+      )}
     </div>
   );
 }
@@ -131,10 +186,12 @@ const AvailabilityContainer = () => {
       </div>
     );
   } else if (isError) {
+    const uiMessage = getUserFriendlyMessage(error);
     content = (
       <ErrorState
-        message={error?.message ?? "Something went wrong. Please try again."}
-        onRetry={refetch}
+        title={uiMessage.title}
+        description={uiMessage.description}
+        actionLabel={uiMessage.action}
       />
     );
   } else if (data && data.data.length === 0) {

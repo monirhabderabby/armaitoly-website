@@ -119,7 +119,7 @@ export default function VillaCard({
           `${bedrooms} Bedroom${bedrooms !== 1 ? "s" : ""}`
         ),
     },
-    { icon: <ViewIcon />, label: "Beach Front" },
+    { icon: <ViewIcon />, label: villa.location },
     { icon: <SizeIcon />, label: "60 sqm" },
   ];
 
