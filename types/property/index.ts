@@ -4,6 +4,30 @@ export interface VillaPrice {
   per: string;
 }
 
+type RoomDetails = {
+  roomType: string;
+  qty: number;
+  minPrice: number;
+  minStay: number;
+  maxStay: number;
+  restrictionStrategy: "stayThrough" | string;
+  maxPeople?: number;
+  maxAdult: number;
+  maxChildren: number;
+  taxPercentage: number;
+  taxPerson: number;
+  rackRate: number;
+  cleaningFee: number;
+  securityDeposit: number;
+  sellPriority: number;
+  roomSize: number;
+  highlightColor: string;
+  includeInReports: boolean;
+  overbookingProtection: "property" | string;
+  blockAfterCheckOutDays: number;
+  controlPriority: number;
+};
+
 export interface VillaCapacity {
   baseGuests: number;
   extraGuestFee: number;
@@ -48,6 +72,8 @@ export interface Villa {
     url: string;
     alt: string;
   }[];
+  roomDetails: RoomDetails;
+  _featureCodes?: string[][];
 }
 
 export interface HomePagePropertyResponse {

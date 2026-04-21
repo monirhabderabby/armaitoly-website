@@ -3,8 +3,20 @@ import Image from "next/image";
 import Link from "next/link";
 
 // ── helpers ────────────────────────────────────────────────────────────────
-function getBedrooms(bedroom: string[]): number {
-  return bedroom.filter((b) => b.toLowerCase().includes("bed")).length;
+function getBedroomCount(featureCodes: string[][]): number {
+  for (const group of featureCodes) {
+    for (const code of group) {
+      const match = code.match(/^BEDROOMS_(\d+)$/);
+      if (match) return parseInt(match[1], 10);
+    }
+  }
+  return 1;
+}
+
+function hasLivingSleepingCombo(featureCodes: string[][]): boolean {
+  return featureCodes.some((group) =>
+    group.includes("BEDROOM_LIVING_SLEEPING_COMBO"),
+  );
 }
 
 // ── icons ──────────────────────────────────────────────────────────────────
@@ -74,6 +86,23 @@ function SizeIcon() {
   );
 }
 
+function SofaIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" />
+      <path d="M2 11a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4H2v-4z" />
+      <path d="M4 15v2M20 15v2" />
+    </svg>
+  );
+}
+
 function WaveDecoration() {
   return (
     <Image src="/logo-shape.png" alt="logo-shape" width={50} height={30} />
@@ -95,33 +124,26 @@ export default function VillaCard({
   startDate,
   endDate,
 }: VillaCardProps) {
-  const maxGuests = villa.capacity.baseGuests;
-  const bedrooms = getBedrooms(villa.bedroom);
+  const maxGuests = villa.roomDetails?.maxPeople ?? 0;
+  const bedroomCount = getBedroomCount(villa._featureCodes ?? []);
+  const hasCombo = hasLivingSleepingCombo(villa._featureCodes ?? []);
+
+  const specs: { icon: React.ReactNode; label: React.ReactNode }[] = [
+    { icon: <GuestIcon />, label: `${maxGuests} Guests` },
+    {
+      icon: <BedroomIcon />,
+      label: `${bedroomCount} Bedroom${bedroomCount !== 1 ? "s" : ""}`,
+    },
+    ...(hasCombo ? [{ icon: <SofaIcon />, label: "1 Sofa" }] : []),
+    { icon: <ViewIcon />, label: villa.location },
+    { icon: <SizeIcon />, label: "60 sqm" },
+  ];
 
   const firstLine = villa.description.split("\n")[0];
   const secondLine =
     villa.description
       .split("\n")
       .find((l) => l.trim().length > 40 && l.trim() !== firstLine.trim()) ?? "";
-
-  const specs: { icon: React.ReactNode; label: React.ReactNode }[] = [
-    { icon: <GuestIcon />, label: `${maxGuests} Guests` },
-    {
-      icon: <BedroomIcon />,
-      label:
-        bedrooms === 2 ? (
-          <>
-            1 Bedroom
-            <br />
-            and 1 Living/Sleeping Area
-          </>
-        ) : (
-          `${bedrooms} Bedroom${bedrooms !== 1 ? "s" : ""}`
-        ),
-    },
-    { icon: <ViewIcon />, label: villa.location },
-    { icon: <SizeIcon />, label: "60 sqm" },
-  ];
 
   return (
     <article
