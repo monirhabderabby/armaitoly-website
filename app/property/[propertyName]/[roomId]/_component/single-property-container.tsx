@@ -401,7 +401,7 @@ export default function SinglePropertyContainer({
           </div>
 
           {/* Minimum Stay */}
-          <div>
+          {/* <div>
             <SectionHeading title="Minimum Stay Policy" />
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {villa.minimumStay.map((stay, i) => (
@@ -427,7 +427,7 @@ export default function SinglePropertyContainer({
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Pets */}
           {villa.pets?.length > 0 && (
