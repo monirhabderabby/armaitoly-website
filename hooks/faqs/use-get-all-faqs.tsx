@@ -6,7 +6,7 @@ export function useGetAllFaqs() {
   return useQuery({
     queryKey: ["faqs"],
     queryFn: async (): Promise<FAQResponse> => {
-      const res = await fetch(`${baseUrl}/faq`, {
+      const res = await fetch(`${baseUrl}/faq?page=1&limit=500`, {
         method: "GET",
       });
 

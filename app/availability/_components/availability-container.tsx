@@ -137,7 +137,7 @@ const AvailabilityContainer = () => {
   const checkIn = formatDateForApi(searchParams.get("checkIn"));
   const checkOut = formatDateForApi(searchParams.get("checkOut"));
 
-  const { isLoading, data, isError, error, refetch } = useGetVillaByFilter({
+  const { isLoading, data, isError, error } = useGetVillaByFilter({
     checkIn,
     checkOut,
     numAdult: defaultAdults,
